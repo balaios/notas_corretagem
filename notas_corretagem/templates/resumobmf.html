@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Resumo BMF:</h2>
+<table class="table">
+    <tr>
+        <th>Nota:</th>
+        <th>Folha:</th>
+        <th>Data:</th>
+        <th>Valor:</th>
+    </tr>
+    {% for resultado in messages %}
+    <tr>
+        <td>{{ resultado.nr_nota }}</td>
+        <td>{{ resultado.folha }}</td>
+        <td>{{ resultado.data_pregao }}</td>
+        <td>{{ resultado.total_liquido_da_nota }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

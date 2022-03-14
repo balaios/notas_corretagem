@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Operações Bovespa:</h2>
+<table class="table">
+    <tr>
+        <th>Nr Nota:</th>
+        <th>Folha:</th>
+        <th>C/V:</th>
+        <th>Tipo:</th>
+        <th>Titulo:</th>
+        <th>Quantidade:</th>
+        <th>Preço:</th>
+        <th>Valor da operação:</th>
+        <th>D/C:</th>
+    </tr>
+    {% for resultado in messages %}
+    <tr>
+        <td>{{ resultado.nr_nota }}</td>
+        <td>{{ resultado.folha }}</td>
+        <td>{{ resultado.cv }}</td>
+        <td>{{ resultado.tipo_mercado }}</td>
+        <td>{{ resultado.especificação_do_título }}</td>
+        <td>{{ resultado.quantidade }}</td>
+        <td>{{ resultado.preçoajuste }}</td>
+        <td>{{ resultado.vlrdeoperação }}</td>
+        <td>{{ resultado.dc }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

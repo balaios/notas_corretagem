@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Operações BMF:</h2>
+<table class="table">
+    <tr>
+        <th>Nr Nota:</th>
+        <th>Folha:</th>
+        <th>C/V:</th>
+        <th>Mercadoria:</th>
+        <th>Vencimento:</th>
+        <th>Quantidade:</th>
+        <th>Preçoa/Ajuste:</th>
+        <th>Tipo negócio:</th>
+        <th>Valor da operação:</th>
+        <th>D/C:</th>
+        <th>taxaoperacional:</th>
+    </tr>
+    {% for resultado in messages %}
+    <tr>
+        <td>{{ resultado.nr_nota }}</td>
+        <td>{{ resultado.folha }}</td>
+        <td>{{ resultado.cv }}</td>
+        <td>{{ resultado.mercadoria }}</td>
+        <td>{{ resultado.vencimento }}</td>
+        <td>{{ resultado.quantidade }}</td>
+        <td>{{ resultado.preçoaajuste }}</td>
+        <td>{{ resultado.tiponegócio }}</td>
+        <td>{{ resultado.vlrdeoperação }}</td>
+        <td>{{ resultado.dc }}</td>
+        <td>{{ resultado.taxaoperacional }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
