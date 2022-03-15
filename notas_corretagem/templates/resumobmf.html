@@ -8,14 +8,32 @@
         <th>Nota:</th>
         <th>Folha:</th>
         <th>Data:</th>
-        <th>Valor:</th>
+        <th>Valor dos negócios:</th>
+        <th>IRRF Day Trade (proj.):</th>
+        <th>Taxa operacional:</th>
+        <th>Taxa registro BM&F:</th>
+        <th>Taxas BM&F (emol+f.gar):</th>
+        <th>I.S.S:</th>
+        <th>Ajuste de posição:</th>
+        <th>Ajuste day trade:</th>
+        <th>Total das despesas:</th>
+        <th>Total líquido da nota:</th>
     </tr>
     {% for resultado in messages %}
     <tr>
         <td>{{ resultado.nr_nota }}</td>
         <td>{{ resultado.folha }}</td>
-        <td>{{ resultado.data_pregao }}</td>
-        <td>{{ resultado.total_liquido_da_nota }}</td>
+        <td>{{ resultado.data_pregão }}</td>
+        <td>{{ resultado.valor_negócios }}</td>
+        <td>{{ resultado.irrf_day_trade_proj }}</td>
+        <td>{{ resultado.taxa_operacional }}</td>
+        <td>{{ resultado.taxas_bmf }}</td>
+        <td>{{ resultado.taxa_registro_bmf }}</td>
+        <td>{{ resultado.impostos }}</td>
+        <td>{{ resultado.ajuste_posição }}</td>
+        <td>{{ resultado.ajuste_day_trade }}</td>
+        <td>{{ resultado.total_despesas }}</td>
+        <td>{{ resultado.total_líquido_nota }}</td>
     </tr>
     {% endfor %}
 </table>

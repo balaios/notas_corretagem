@@ -5,12 +5,11 @@ from .extensions import db
 from .models.bmf import Folhasbmf, Operaçõesbmf
 from .models.bovespa import Folhasb3, Operaçõesb3
 
-
 cabeçalho_bmf = {
-    "numero_da_corretora": (480, 520, 90, 110),
+    "número_corretora": (480, 520, 90, 110),
     "nr_nota": (450, 490, 50, 70),
     "folha": (490, 520, 50, 70),
-    "data_pregao": (520, 570, 50, 70),
+    "data_pregão": (520, 570, 50, 70),
     "cnpj_cpf": (460, 550, 130, 150),
     "código_cliente": (460, 550, 150, 170),
 }
@@ -20,7 +19,7 @@ folha_bmf = {
     "compra_disponível": (200, 250, 630, 655),
     "venda_opções": (330, 360, 630, 655),
     "compra_opções": (430, 470, 630, 655),
-    "valor_dos_negócios": (510, 590, 630, 655),
+    "valor_negócios": (510, 590, 630, 655),
     "irrf": (110, 140, 650, 675),
     "irrf_day_trade_proj": (220, 250, 650, 675),
     "taxa_operacional": (280, 360, 650, 675),
@@ -30,13 +29,13 @@ folha_bmf = {
     "impostos": (210, 250, 675, 700),
     "ajuste_posição": (280, 350, 675, 700),
     "ajuste_day_trade": (390, 460, 675, 700),
-    "total_das_despesas": (540, 570, 675, 700),
+    "total_despesas": (540, 570, 675, 700),
     "outros": (50, 90, 700, 720),
     "irrf_operacional": (110, 150, 700, 720),
     "total_conta_investimento": (200, 250, 700, 720),
     "total_conta_normal": (310, 350, 700, 720),
-    "total_liquido": (420, 460, 700, 720),
-    "total_liquido_da_nota": (500, 600, 700, 720),
+    "total_líquido": (420, 460, 700, 720),
+    "total_líquido_nota": (500, 600, 700, 720),
 }
 
 operações_bmf = {
@@ -44,47 +43,47 @@ operações_bmf = {
     "mercadoria": (45, 90, 182, 600),
     "vencimento": (110, 160, 182, 600),
     "quantidade": (200, 230, 182, 600),
-    "preçoaajuste": (230, 285, 182, 600),
-    "tiponegócio": (285, 370, 182, 600),
-    "vlrdeoperação": (380, 460, 182, 600),
+    "preço_ajuste": (230, 285, 182, 600),
+    "tipo_negócio": (285, 370, 182, 600),
+    "valor_operação": (380, 460, 182, 600),
     "dc": (460, 480, 182, 600),
-    "taxaoperacional": (540, 570, 182, 600),
+    "taxa_operacional": (540, 570, 182, 600),
 }
 
 cabeçalho_b3 = {
-    "numero_da_corretora": (440, 500, 160, 180),
+    "número_corretora": (440, 500, 160, 180),
     "nr_nota": (435, 470, 50, 70),
     "folha": (490, 520, 50, 70),
-    "data_pregao": (520, 570, 50, 70),
+    "data_pregão": (520, 570, 50, 70),
     "cnpj_cpf": (420, 480, 140, 160),
     "código_cliente": (35, 70, 140, 160),
 }
 
 folha_b3 = {
     "debêntures": (200, 300, 455, 475),
-    "vendas_à_vista": (200, 300, 465, 485),
-    "compras_à_vista": (200, 300, 475, 495),
+    "vendas_vista": (200, 300, 465, 485),
+    "compras_vista": (200, 300, 475, 495),
     "compra_opções": (200, 300, 485, 505),
     "venda_opções": (200, 300, 495, 510),
     "operações_termo": (200, 300, 505, 520),
-    "valor_das_oper_títulos_públ": (200, 300, 515, 525),
-    "valor_das_operações": (200, 300, 525, 545),
-    "valor_líquido_das_operações": (450, 560, 465, 480),
-    "taxa_de_liquidação": (450, 560, 475, 490),
-    "taxa_de_registro": (450, 560, 485, 500),
+    "valor_operações_títulos_públ": (200, 300, 515, 525),
+    "valor_operações": (200, 300, 525, 545),
+    "valor_líquido_operações": (450, 560, 465, 480),
+    "taxa_liquidação": (450, 560, 475, 490),
+    "taxa_registro": (450, 560, 485, 500),
     "total_clbc": (450, 560, 495, 506),
-    "taxa_de_termoopções": (450, 560, 510, 525),
+    "taxa_termo_opções": (450, 560, 510, 525),
     "taxa_ana": (450, 560, 525, 535),
     "emolumentos": (450, 560, 530, 545),
     "total_bovespa": (450, 560, 540, 555),
     "taxa_operacional": (450, 560, 565, 580),
     "execução": (450, 560, 575, 590),
-    "taxa_de_custódia": (450, 560, 585, 600),
+    "taxa_custódia": (450, 560, 585, 600),
     "impostos": (450, 560, 595, 610),
     "irrf": (450, 560, 605, 620),
     "outros": (450, 560, 615, 630),
     "total_custos_despesas": (450, 560, 625, 640),
-    "liquido": (450, 560, 635, 655),
+    "líquido": (450, 560, 635, 655),
 }
 
 operações_b3 = {
@@ -93,11 +92,11 @@ operações_b3 = {
     "cv": (90, 110, 250, 450),
     "tipo_mercado": (105, 160, 250, 450),
     "prazo": (170, 190, 250, 450),
-    "especificação_do_título": (190, 300, 250, 450),
+    "especificação_título": (190, 300, 250, 450),
     "obs": (300, 340, 250, 450),
     "quantidade": (330, 390, 250, 450),
-    "preçoajuste": (390, 450, 250, 450),
-    "vlrdeoperação": (450, 550, 250, 450),
+    "preço_ajuste": (390, 450, 250, 450),
+    "valor_operação": (450, 550, 250, 450),
     "dc": (545, 560, 250, 450),
 }
 

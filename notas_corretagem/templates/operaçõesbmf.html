@@ -11,11 +11,11 @@
         <th>Mercadoria:</th>
         <th>Vencimento:</th>
         <th>Quantidade:</th>
-        <th>Preçoa/Ajuste:</th>
+        <th>Preço/Ajuste:</th>
         <th>Tipo negócio:</th>
         <th>Valor da operação:</th>
         <th>D/C:</th>
-        <th>taxaoperacional:</th>
+        <th>Taxa operacional:</th>
     </tr>
     {% for resultado in messages %}
     <tr>
@@ -25,11 +25,11 @@
         <td>{{ resultado.mercadoria }}</td>
         <td>{{ resultado.vencimento }}</td>
         <td>{{ resultado.quantidade }}</td>
-        <td>{{ resultado.preçoaajuste }}</td>
-        <td>{{ resultado.tiponegócio }}</td>
-        <td>{{ resultado.vlrdeoperação }}</td>
+        <td>{{ resultado.preço_ajuste }}</td>
+        <td>{{ resultado.tipo_negócio }}</td>
+        <td>{{ resultado.valor_operação }}</td>
         <td>{{ resultado.dc }}</td>
-        <td>{{ resultado.taxaoperacional }}</td>
+        <td>{{ resultado.taxa_operacional }}</td>
     </tr>
     {% endfor %}
 </table>
