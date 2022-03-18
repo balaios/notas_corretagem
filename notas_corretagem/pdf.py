@@ -2,19 +2,19 @@ from pdfminer.high_level import extract_pages
 from pdfminer.layout import LAParams, LTTextBoxHorizontal
 
 from .extensions import db
-from .models.bmf import Folhasbmf, Operaçõesbmf
-from .models.bovespa import Folhasb3, Operaçõesb3
+from .models.bmf import Folhasbmf, Operaçõesbmf, Notasbmf
+from .models.bovespa import Folhasbovespa, Operaçõesbovespa, Notasbovespa
 
 cabeçalho_bmf = {
     "número_corretora": (480, 520, 90, 110),
     "nr_nota": (450, 490, 50, 70),
-    "folha": (490, 520, 50, 70),
     "data_pregão": (520, 570, 50, 70),
     "cnpj_cpf": (460, 550, 130, 150),
     "código_cliente": (460, 550, 150, 170),
 }
 
 folha_bmf = {
+    "folha": (490, 520, 50, 70),
     "venda_disponível": (110, 140, 630, 655),
     "compra_disponível": (200, 250, 630, 655),
     "venda_opções": (330, 360, 630, 655),
@@ -120,7 +120,8 @@ def principal(arquivo_pdf: str) -> None:
             objetos, tamanho_eixo_y
         )
         if "BM&F" in tipo_da_nota:
-            banco_folha = Folhasbmf
+            banco_notas = Notasbmf
+            banco_folhas = Folhasbmf
             banco_operações = Operaçõesbmf
             cabeçalho = seleciona_textos_nota(
                 dicionario_bbox_texto, cabeçalho_bmf
@@ -131,8 +132,9 @@ def principal(arquivo_pdf: str) -> None:
             )
 
         elif "BOVESPA" in tipo_da_nota:
-            banco_folha = Folhasb3
-            banco_operações = Operaçõesb3
+            banco_notas = Notasbovespa
+            banco_folhas = Folhasbovespa
+            banco_operações = Operaçõesbovespa
             cabeçalho = seleciona_textos_nota(
                 dicionario_bbox_texto, cabeçalho_b3
             )
@@ -146,10 +148,14 @@ def principal(arquivo_pdf: str) -> None:
         tratar_texto(cabeçalho)
         tratar_texto(folha)
         tratar_texto(operações)
-        preparar_para_banco_de_dados(cabeçalho, folha)
-        preparar_para_banco_de_dados(cabeçalho, operações)
-        inserir_banco_de_dados_folha(folha, banco_folha)
-        inserir_banco_de_dados_operações(operações, banco_operações)
+        inserir_banco_de_dados(
+            cabeçalho,
+            banco_notas,
+            folha,
+            banco_folhas,
+            operações,
+            banco_operações,
+        )
 
 
 def verificar_tipo_da_nota(objetos: list) -> str:
@@ -226,31 +232,24 @@ def tratar_texto(conteudo: dict) -> dict:
     return conteudo
 
 
-def preparar_para_banco_de_dados(cabeçalho: dict, conteudo: dict) -> dict:
-    if isinstance(list(conteudo)[0], int):
-        for valor in conteudo.values():
-            preparar_para_banco_de_dados(cabeçalho, valor)
+def inserir_banco_de_dados(
+    cabeçalho: dict,
+    banco_notas: db,
+    folha: dict,
+    banco_folhas: db,
+    operações: dict,
+    banco_operações: db,
+) -> None:
+
+    if banco_notas.query.filter_by(**cabeçalho).first():
+        nota = banco_notas.query.filter_by(**cabeçalho).first()
     else:
-        conteudo.update(cabeçalho)
+        nota = banco_notas(**cabeçalho)
 
-    return conteudo
+    f = banco_folhas(notasbmf=nota, **folha)
 
-
-def inserir_banco_de_dados_folha(folha: dict, banco: db) -> None:
-    existe = banco.query.filter_by(
-        nr_nota=folha["nr_nota"], folha=folha["folha"]
-    ).first()
-    if not existe:
-        db.session.add(banco(**folha))
-        db.session.commit()
-
-
-def inserir_banco_de_dados_operações(operações: dict, banco: db) -> None:
-    linha = list(operações)[0]
-    existe = banco.query.filter_by(
-        nr_nota=operações[linha]["nr_nota"], folha=operações[linha]["folha"]
-    ).first()
-    if not existe:
-        for operação in operações.values():
-            db.session.add(banco(**operação))
-        db.session.commit()
+    for operação in operações.values():
+        c = banco_operações(folhasbmf=f, **operação)
+        if not banco_operações.query.filter_by(**operação).first():
+            db.session.add(c)
+    db.session.commit()

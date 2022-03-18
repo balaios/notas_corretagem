@@ -1,14 +1,20 @@
 from ..extensions import db
 
 
-class Folhasb3(db.Model):
+class Notasbovespa(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     número_corretora = db.Column(db.String(40))
     nr_nota = db.Column(db.String(40))
-    folha = db.Column(db.String(40))
     data_pregão = db.Column(db.String(40))
     cnpj_cpf = db.Column(db.String(40))
     código_cliente = db.Column(db.String(40))
+    debêntures = db.Column(db.String(40))
+    folha = db.relationship("Folhasbovespa", backref="notasbovespa", lazy=True)
+
+
+class Folhasbovespa(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nota_id = db.Column(db.Integer, db.ForeignKey("notasbovespa.id"))
     debêntures = db.Column(db.String(40))
     vendas_vista = db.Column(db.String(40))
     compras_vista = db.Column(db.String(40))
@@ -33,16 +39,14 @@ class Folhasb3(db.Model):
     outros = db.Column(db.String(40))
     total_custos_despesas = db.Column(db.String(40))
     líquido = db.Column(db.String(40))
+    operaçõesb3 = db.relationship(
+        "Operaçõesbovespa", backref="folhasbovespa", lazy=True
+    )
 
 
-class Operaçõesb3(db.Model):
+class Operaçõesbovespa(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    número_corretora = db.Column(db.String(40))
-    nr_nota = db.Column(db.String(40))
-    folha = db.Column(db.String(40))
-    data_pregão = db.Column(db.String(40))
-    cnpj_cpf = db.Column(db.String(40))
-    código_cliente = db.Column(db.String(40))
+    folha_id = db.Column(db.Integer, db.ForeignKey("folhasbovespa.id"))
     q = db.Column(db.String(40))
     negociação = db.Column(db.String(40))
     cv = db.Column(db.String(40))

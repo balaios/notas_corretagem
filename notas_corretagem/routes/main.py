@@ -1,8 +1,8 @@
 from flask import Blueprint, redirect, render_template, request, url_for
 
 from ..extensions import db
-from ..models.bmf import Folhasbmf, Operaçõesbmf
-from ..models.bovespa import Folhasb3, Operaçõesb3
+from ..models.bmf import Folhasbmf, Notasbmf, Operaçõesbmf
+from ..models.bovespa import Folhasbovespa, Operaçõesbovespa
 from ..models.upload import Upload
 from ..pdf import principal
 
@@ -34,8 +34,8 @@ def add():
 @main.route("/operacoesbmf")
 def operacaobmf():
 
-    messages = Operaçõesbmf.query.all()
-
+    messages = Operaçõesbmf.query.join(Folhasbmf).join(Notasbmf).all()
+    # db.session.query(Operaçõesbmf, Notasbmf).all()
     return render_template("operaçõesbmf.html", messages=messages)
 
 
@@ -50,7 +50,7 @@ def resumobmf():
 @main.route("/operacoesb3")
 def operacaob3():
 
-    messages = Operaçõesb3.query.all()
+    messages = Operaçõesbovespa.query.all()
 
     return render_template("operaçõesb3.html", messages=messages)
 
@@ -58,7 +58,7 @@ def operacaob3():
 @main.route("/resumob3")
 def resumob3():
 
-    messages = Folhasb3.query.all()
+    messages = Folhasbovespa.query.all()
 
     return render_template("resumob3.html", messages=messages)
 
