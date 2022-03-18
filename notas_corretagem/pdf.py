@@ -222,34 +222,39 @@ def tratar_texto(conteudo: dict) -> dict:
             )
             if " D" in texto or " C" in texto:
                 if "D" in texto:
-                    conteudo[chave] = float(texto.replace("D", "")) * -1
+                    conteudo[chave] = str(float(texto.replace("D", "")) * -1)
                 else:
                     conteudo[chave] = texto.replace("C", "")
             elif "numero_da_corretora" in chave:
-                conteudo[chave] = texto.rsplit()[0]
+                conteudo[chave] = str(texto.rsplit()[0])
             else:
-                conteudo[chave] = texto
+                conteudo[chave] = str(texto)
     return conteudo
 
 
 def inserir_banco_de_dados(
     cabeçalho: dict,
     banco_notas: db,
-    folha: dict,
+    folhas: dict,
     banco_folhas: db,
     operações: dict,
     banco_operações: db,
 ) -> None:
 
-    if banco_notas.query.filter_by(**cabeçalho).first():
-        nota = banco_notas.query.filter_by(**cabeçalho).first()
-    else:
-        nota = banco_notas(**cabeçalho)
+    nota_db = banco_notas.query.filter_by(**cabeçalho).first()
 
-    f = banco_folhas(notasbmf=nota, **folha)
+    if not nota_db:
+        nota_db = banco_notas(**cabeçalho)
+
+    folha = banco_folhas.query.filter_by(notasbmf_id=nota_db.id, **folhas).first()
+
+    if not folha:
+        folha = banco_folhas(notasbmf=nota_db, **folhas)
 
     for operação in operações.values():
-        c = banco_operações(folhasbmf=f, **operação)
-        if not banco_operações.query.filter_by(**operação).first():
-            db.session.add(c)
+        operação_db = banco_operações.query.filter_by(folhasbmf_id=folha.id, **operação).first()
+        if not operação_db:
+            operação_db = banco_operações(folhasbmf=folha, **operação)
+
+        db.session.add(operação_db)
     db.session.commit()

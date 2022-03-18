@@ -2,18 +2,16 @@ from ..extensions import db
 
 
 class Notasbmf(db.Model):
-    __tablename__ = "notasbmf"
     id = db.Column(db.Integer, primary_key=True)
     número_corretora = db.Column(db.String(40))
     nr_nota = db.Column(db.String(40))
     data_pregão = db.Column(db.String(40))
     cnpj_cpf = db.Column(db.String(40))
     código_cliente = db.Column(db.String(40))
-    folha = db.relationship("Folhasbmf", backref="notasbmf", lazy=True)
+    folhasbmf = db.relationship("Folhasbmf", backref="notasbmf", lazy='select')
 
 
 class Folhasbmf(db.Model):
-    __tablename__ = "folhasbmf"
     id = db.Column(db.Integer, primary_key=True)
     notasbmf_id = db.Column(db.Integer, db.ForeignKey("notasbmf.id"))
     folha = db.Column(db.String(40))
@@ -38,11 +36,10 @@ class Folhasbmf(db.Model):
     total_conta_normal = db.Column(db.String(40))
     total_líquido = db.Column(db.String(40))
     total_líquido_nota = db.Column(db.String(40))
-    operaçõesbmf = db.relationship("Operaçõesbmf", backref="folhasbmf", lazy=True)
+    operaçõesbmf = db.relationship("Operaçõesbmf", backref="folhasbmf", lazy=False)
 
 
 class Operaçõesbmf(db.Model):
-    __tablename__ = "operaçõesbmf"
     id = db.Column(db.Integer, primary_key=True)
     folhasbmf_id = db.Column(db.Integer, db.ForeignKey("folhasbmf.id"))
     cv = db.Column(db.String(40))
