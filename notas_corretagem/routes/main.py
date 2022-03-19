@@ -17,7 +17,7 @@ def index():
 @main.route("/add", methods=["GET", "POST"])
 def add():
     if request.method == "POST":
-        pdfs = request.files.getlist("files[]")
+        pdfs = request.files.getlist("pdfs")
         if not pdfs:
             return redirect(url_for("main.add"))
         for pdf in pdfs:

@@ -19,7 +19,7 @@ def index():
 
 @api.route("/add", methods=["POST"])
 def add():
-    pdfs = request.files.getlist("files[]")
+    pdfs = request.files.getlist("pdfs")
     for pdf in pdfs:
         pdf.save("notas_corretagem/uploads/" + pdf.filename)
         principal("notas_corretagem/uploads/" + pdf.filename)
