@@ -2,8 +2,8 @@ from pdfminer.high_level import extract_pages
 from pdfminer.layout import LAParams, LTTextBoxHorizontal
 
 from .extensions import db
-from .models.bmf import Folhasbmf, Operaçõesbmf, Notasbmf
-from .models.bovespa import Folhasbovespa, Operaçõesbovespa, Notasbovespa
+from .models.bmf import Folhasbmf, Notasbmf, Operaçõesbmf
+from .models.bovespa import Folhasbovespa, Notasbovespa, Operaçõesbovespa
 
 cabeçalho_bmf = {
     "número_corretora": (480, 520, 90, 110),
@@ -242,19 +242,19 @@ def inserir_banco_de_dados(
 ) -> None:
 
     nota_db = banco_notas.query.filter_by(**cabeçalho).first()
-
     if not nota_db:
         nota_db = banco_notas(**cabeçalho)
+    db.session.add(nota_db)
 
-    folha = banco_folhas.query.filter_by(notasbmf_id=nota_db.id, **folhas).first()
-
-    if not folha:
-        folha = banco_folhas(notasbmf=nota_db, **folhas)
+    folha_db = banco_folhas.query.filter_by(notas_id=nota_db.id, **folhas).first()
+    if not folha_db:
+        folha_db = banco_folhas(notas_id=nota_db.id, **folhas)
+    db.session.add(folha_db)
 
     for operação in operações.values():
-        operação_db = banco_operações.query.filter_by(folhasbmf_id=folha.id, **operação).first()
+        operação_db = banco_operações.query.filter_by(folhas_id=folha_db.id, **operação).first()
         if not operação_db:
-            operação_db = banco_operações(folhasbmf=folha, **operação)
+            operação_db = banco_operações(folhas_id=folha_db.id, **operação)
 
         db.session.add(operação_db)
     db.session.commit()
