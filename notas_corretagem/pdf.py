@@ -53,13 +53,13 @@ operações_bmf = {
 cabeçalho_b3 = {
     "número_corretora": (440, 500, 160, 180),
     "nr_nota": (435, 470, 50, 70),
-    "folha": (490, 520, 50, 70),
     "data_pregão": (520, 570, 50, 70),
     "cnpj_cpf": (420, 480, 140, 160),
     "código_cliente": (35, 70, 140, 160),
 }
 
 folha_b3 = {
+    "folha": (490, 520, 50, 70),
     "debêntures": (200, 300, 455, 475),
     "vendas_vista": (200, 300, 465, 485),
     "compras_vista": (200, 300, 475, 495),

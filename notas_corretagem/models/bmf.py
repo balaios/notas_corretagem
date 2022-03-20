@@ -10,7 +10,7 @@ class Notasbmf(db.Model):
     data_pregão = db.Column(db.String(40))
     cnpj_cpf = db.Column(db.String(40))
     código_cliente = db.Column(db.String(40))
-    folhasbmf = db.relationship("Folhasbmf", backref="notas_bmf", lazy=True)
+    folhas_bmf = db.relationship("Folhasbmf", backref="notas_bmf", lazy=True)
 
 
 class Folhasbmf(db.Model):
@@ -40,7 +40,7 @@ class Folhasbmf(db.Model):
     total_conta_normal = db.Column(db.String(40))
     total_líquido = db.Column(db.String(40))
     total_líquido_nota = db.Column(db.String(40))
-    operaçõesbmf = db.relationship("Operaçõesbmf", backref="folhas_bmf", lazy=False)
+    operações_bmf = db.relationship("Operaçõesbmf", backref="folhas_bmf", lazy=False)
 
 
 class Operaçõesbmf(db.Model):

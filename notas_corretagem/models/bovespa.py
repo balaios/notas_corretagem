@@ -11,14 +11,15 @@ class Notasbovespa(db.Model):
     cnpj_cpf = db.Column(db.String(40))
     código_cliente = db.Column(db.String(40))
     debêntures = db.Column(db.String(40))
-    folha = db.relationship("Folhasbovespa", backref="notas_bovespa", lazy=True)
+    folhas_bovespa = db.relationship("Folhasbovespa", backref="notas_bovespa", lazy=True)
 
 
 class Folhasbovespa(db.Model):
     __tablename__ = "folhas_bovespa"
 
     id = db.Column(db.Integer, primary_key=True)
-    nota_id = db.Column(db.Integer, db.ForeignKey("notas_bovespa.id"))
+    notas_id = db.Column(db.Integer, db.ForeignKey("notas_bovespa.id"))
+    folha = db.Column(db.String(40))
     debêntures = db.Column(db.String(40))
     vendas_vista = db.Column(db.String(40))
     compras_vista = db.Column(db.String(40))
@@ -43,7 +44,7 @@ class Folhasbovespa(db.Model):
     outros = db.Column(db.String(40))
     total_custos_despesas = db.Column(db.String(40))
     líquido = db.Column(db.String(40))
-    operaçõesb3 = db.relationship(
+    operações_bovespa = db.relationship(
         "Operaçõesbovespa", backref="folhas_bovespa", lazy=True
     )
 
@@ -52,7 +53,7 @@ class Operaçõesbovespa(db.Model):
     __tablename__ = "operações_bovespa"
 
     id = db.Column(db.Integer, primary_key=True)
-    folha_id = db.Column(db.Integer, db.ForeignKey("folhas_bovespa.id"))
+    folhas_id = db.Column(db.Integer, db.ForeignKey("folhas_bovespa.id"))
     q = db.Column(db.String(40))
     negociação = db.Column(db.String(40))
     cv = db.Column(db.String(40))
