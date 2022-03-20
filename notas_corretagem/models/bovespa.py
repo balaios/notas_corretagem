@@ -10,7 +10,6 @@ class Notasbovespa(db.Model):
     data_pregão = db.Column(db.String(40))
     cnpj_cpf = db.Column(db.String(40))
     código_cliente = db.Column(db.String(40))
-    debêntures = db.Column(db.String(40))
     folhas_bovespa = db.relationship("Folhasbovespa", backref="notas_bovespa", lazy=True)
 
 
