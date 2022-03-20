@@ -218,6 +218,8 @@ def tratar_texto(conteudo: dict) -> dict:
                 .replace(".", "")
                 .replace(",", ".")
                 .replace("@", "")
+                .replace("    ", "")
+                .replace("-", "")
                 .strip()
             )
             if " D" in texto or " C" in texto:
@@ -225,7 +227,7 @@ def tratar_texto(conteudo: dict) -> dict:
                     conteudo[chave] = str(float(texto.replace("D", "")) * -1)
                 else:
                     conteudo[chave] = texto.replace("C", "")
-            elif "numero_da_corretora" in chave:
+            elif "número_corretora" in chave:
                 conteudo[chave] = str(texto.rsplit()[0])
             else:
                 conteudo[chave] = str(texto)
@@ -244,17 +246,17 @@ def inserir_banco_de_dados(
     nota_db = banco_notas.query.filter_by(**cabeçalho).first()
     if not nota_db:
         nota_db = banco_notas(**cabeçalho)
-    db.session.add(nota_db)
+        db.session.add(nota_db)
 
     folha_db = banco_folhas.query.filter_by(notas_id=nota_db.id, **folhas).first()
     if not folha_db:
         folha_db = banco_folhas(notas_id=nota_db.id, **folhas)
-    db.session.add(folha_db)
+        db.session.add(folha_db)
 
     for operação in operações.values():
         operação_db = banco_operações.query.filter_by(folhas_id=folha_db.id, **operação).first()
         if not operação_db:
             operação_db = banco_operações(folhas_id=folha_db.id, **operação)
+            db.session.add(operação_db)
 
-        db.session.add(operação_db)
     db.session.commit()
