@@ -36,7 +36,7 @@ def operacaobmf():
 
     messages = Operaçõesbmf.query.join(Folhasbmf).join(Notasbmf).all()
 
-    return render_template("operaçõesbmf.html", messages=messages)
+    return render_template("bmf/operaçõesbmf.html", messages=messages)
 
 
 @main.route("/resumobmf")
@@ -44,7 +44,7 @@ def resumobmf():
 
     messages = Folhasbmf.query.all()
 
-    return render_template("resumobmf.html", messages=messages)
+    return render_template("bmf/resumobmf.html", messages=messages)
 
 
 @main.route("/operacoesb3")
@@ -52,7 +52,7 @@ def operacaob3():
 
     messages = Operaçõesbovespa.query.join(Folhasbovespa).join(Notasbovespa).all()
 
-    return render_template("operaçõesb3.html", messages=messages)
+    return render_template("bovespa/operaçõesb3.html", messages=messages)
 
 
 @main.route("/resumob3")
@@ -60,7 +60,7 @@ def resumob3():
 
     messages = Folhasbovespa.query.all()
 
-    return render_template("resumob3.html", messages=messages)
+    return render_template("bovespa/resumob3.html", messages=messages)
 
 
 @main.route("/sucesso")
