@@ -109,11 +109,7 @@ def principal(arquivo_pdf: str) -> None:
     for layout in extract_pages(arquivo_pdf, laparams=laparams):
         objetos: list = []
         tamanho_eixo_y = layout.y1
-        for obj in layout._objs:
-            if isinstance(obj, LTTextBoxHorizontal):
-                objetos.append(obj)
-            else:
-                break
+        objetos = [obj for obj in layout._objs if isinstance(obj, LTTextBoxHorizontal)]
 
         tipo_da_nota = verificar_tipo_da_nota(objetos)
         dicionario_bbox_texto = criar_dicionario_bbox_texto(
