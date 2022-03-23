@@ -1,6 +1,7 @@
 from flask import Blueprint, redirect, render_template, request, url_for
 
 from ..extensions import db
+from ..forms.upload import Pdf
 from ..models.bmf import Folhasbmf, Notasbmf, Operaçõesbmf
 from ..models.bovespa import Folhasbovespa, Notasbovespa, Operaçõesbovespa
 from ..models.upload import Upload
@@ -16,10 +17,12 @@ def index():
 
 @main.route("/add", methods=["GET", "POST"])
 def add():
-    if request.method == "POST":
-        pdfs = request.files.getlist("pdfs")
-        if not pdfs:
-            return redirect(url_for("main.add"))
+
+    form = Pdf(meta={'csrf': False})
+
+    if form.validate_on_submit():
+        pdfs = form.pdfs.data
+       
         for pdf in pdfs:
             pdf.save("notas_corretagem/uploads/" + pdf.filename)
             principal("notas_corretagem/uploads/" + pdf.filename)
@@ -28,7 +31,7 @@ def add():
             db.session.commit()
 
         return redirect(url_for("main.sucesso"))
-    return render_template("add.html")
+    return render_template("upload.html", form=form)
 
 
 @main.route("/operacoesbmf")
