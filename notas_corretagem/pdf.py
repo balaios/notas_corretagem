@@ -101,7 +101,7 @@ operações_b3 = {
 }
 
 
-def principal(arquivo_pdf: str) -> None:
+def principal(arquivo_pdf):
     laparams = LAParams(
         char_margin=0.5,
         line_margin=0.0,
@@ -154,7 +154,7 @@ def principal(arquivo_pdf: str) -> None:
         )
 
 
-def verificar_tipo_da_nota(objetos: list) -> str:
+def verificar_tipo_da_nota(objetos):
     tipo_de_nota = ""
     for obj in objetos:
         if "BM&F" in obj.get_text():
@@ -166,7 +166,7 @@ def verificar_tipo_da_nota(objetos: list) -> str:
     return tipo_de_nota
 
 
-def criar_dicionario_bbox_texto(objetos: list, tamanho_eixo_y: int) -> dict:
+def criar_dicionario_bbox_texto(objetos, tamanho_eixo_y):
     bbox = {}
     for obj in objetos:
         x0, y1, x1, y0 = obj.bbox
@@ -179,8 +179,8 @@ def criar_dicionario_bbox_texto(objetos: list, tamanho_eixo_y: int) -> dict:
     return bbox
 
 
-def seleciona_textos_nota(dicionario_bbox_texto: dict, posições: dict) -> dict:
-    textos_da_nota: dict = dict()
+def seleciona_textos_nota(dicionario_bbox_texto, posições):
+    textos_da_nota = dict()
     for bbox, texto in dicionario_bbox_texto.items():
         for campo, bboxmodelo in posições.items():
             if (
@@ -204,7 +204,7 @@ def seleciona_textos_nota(dicionario_bbox_texto: dict, posições: dict) -> dict
     return textos_da_nota
 
 
-def tratar_texto(conteudo: dict) -> dict:
+def tratar_texto(conteudo):
     for chave, texto in conteudo.items():
         if isinstance(texto, dict):
             tratar_texto(texto)
@@ -231,13 +231,13 @@ def tratar_texto(conteudo: dict) -> dict:
 
 
 def inserir_banco_de_dados(
-    cabeçalho: dict,
-    banco_notas: db,
-    folhas: dict,
-    banco_folhas: db,
-    operações: dict,
-    banco_operações: db,
-) -> None:
+    cabeçalho,
+    banco_notas,
+    folhas,
+    banco_folhas,
+    operações,
+    banco_operações,
+):
 
     nota_db = banco_notas.query.filter_by(**cabeçalho).first()
     if not nota_db:
