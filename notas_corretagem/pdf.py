@@ -91,8 +91,8 @@ operações_b3 = {
     "negociação": (40, 80, 250, 450),
     "cv": (90, 110, 250, 450),
     "tipo_mercado": (105, 160, 250, 450),
-    "prazo": (170, 190, 250, 450),
-    "especificação_título": (190, 300, 250, 450),
+    "prazo": (170, 188, 250, 450),
+    "especificação_título": (185, 300, 250, 450),
     "obs": (300, 340, 250, 450),
     "quantidade": (330, 390, 250, 450),
     "preço_ajuste": (390, 450, 250, 450),
@@ -218,11 +218,12 @@ def tratar_texto(conteudo):
                 .replace("-", "")
                 .strip()
             )
-            if " D" in texto or " C" in texto:
-                if "D" in texto:
-                    conteudo[chave] = str(float(texto.replace("D", "")) * -1)
-                else:
-                    conteudo[chave] = texto.replace("C", "")
+            if "folha" in conteudo:
+                if "D" in texto or "C" in texto:
+                    if "D" in texto:
+                        conteudo[chave] = str(float(texto.replace("D", "")) * -1)
+                    else:
+                        conteudo[chave] = texto.replace("C", "")
             elif "número_corretora" in chave:
                 conteudo[chave] = str(texto.rsplit()[0])
             else:
