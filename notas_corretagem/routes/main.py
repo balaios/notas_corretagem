@@ -34,6 +34,20 @@ def add():
     return render_template("upload.html", form=form)
 
 
+@main.route("/declaracao")
+def declaração():
+
+    bovespa = Notasbovespa.query.all()
+    bmf = Notasbmf.query.all()
+    notas = bmf + bovespa
+
+    anos = set()
+    for nota in notas:
+        anos.add(nota.data_pregão.split("/")[2])
+
+    return render_template("declaracao.html", anos=anos)
+
+
 @main.route("/operacoesbmf")
 def operacaobmf():
 
