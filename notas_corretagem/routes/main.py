@@ -1,9 +1,9 @@
-from flask import Blueprint, redirect, render_template, request, url_for
+from flask import Blueprint, redirect, render_template, url_for
 
 from ..extensions import db
 from ..forms.upload import Pdf
-from ..models.bmf import Folhasbmf, Notasbmf, Operaçõesbmf
-from ..models.bovespa import Folhasbovespa, Notasbovespa, Operaçõesbovespa
+from ..models.bmf import Folhasbmf, Operaçõesbmf
+from ..models.bovespa import Folhasbovespa, Operaçõesbovespa
 from ..models.upload import Upload
 from ..pdf import principal
 
@@ -36,15 +36,24 @@ def add():
 @main.route("/declaracao")
 def declaração():
 
-    bovespa = Notasbovespa.query.all()
-    bmf = Notasbmf.query.all()
-    notas = bmf + bovespa
+    bovespa = Folhasbovespa.query.all()
+    bmf = Folhasbmf.query.all()
+    folhas = bmf + bovespa
 
+    total_bmf = 0
+    total_bovespa = 0
     anos = set()
-    for nota in notas:
-        anos.add(nota.data_pregão.split("/")[2])
+    for folha in folhas:
+        if folha.__tablename__ == "folhas_bmf": 
+            anos.add(folha.notas_bmf.data_pregão.split("/")[2])
+            if folha.total_líquido_nota != "|":  
+                total_bmf += float(folha.total_líquido_nota)
+        else:
+            anos.add(folha.notas_bovespa.data_pregão.split("/")[2])
+            if folha.líquido != "|":
+                total_bovespa += float(folha.líquido)
 
-    return render_template("declaracao.html", anos=anos)
+    return render_template("declaracao.html", anos=anos, total_bmf=total_bmf, total_bovespa=total_bovespa)
 
 
 @main.route("/operacoesbmf")
