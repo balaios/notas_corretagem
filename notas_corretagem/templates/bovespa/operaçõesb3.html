@@ -5,7 +5,8 @@
 <h2>Operações Bovespa:</h2>
 <table class="table">
     <tr>
-        <th>Nr Nota:</th>
+        <th>Nota:</th>
+        <th>Data:</th>
         <th>Folha:</th>
         <th>C/V:</th>
         <th>Tipo:</th>
@@ -15,18 +16,19 @@
         <th>Valor da operação:</th>
         <th>D/C:</th>
     </tr>
-    {% for resultado in messages %}
-    <tr>
-        <td>{{ resultado.nr_nota }}</td>
-        <td>{{ resultado.folha }}</td>
-        <td>{{ resultado.cv }}</td>
-        <td>{{ resultado.tipo_mercado }}</td>
-        <td>{{ resultado.especificação_título }}</td>
-        <td>{{ resultado.quantidade }}</td>
-        <td>{{ resultado.preço_ajuste }}</td>
-        <td>{{ resultado.valor_operação }}</td>
-        <td>{{ resultado.dc }}</td>
-    </tr>
+    {% for operação in operações %}
+        <tr>
+            <td>{{ operação.folhas_bovespa.notas_bovespa.nr_nota }}</td>
+            <td>{{ operação.folhas_bovespa.notas_bovespa.data_pregão }}</td>
+            <td>{{ operação.folhas_bovespa.folha }}</td>
+            <td>{{ operação.cv }}</td>
+            <td>{{ operação.tipo_mercado }}</td>
+            <td>{{ operação.especificação_título }}</td>
+            <td>{{ operação.quantidade }}</td>
+            <td>{{ operação.preço_ajuste }}</td>
+            <td>{{ operação.valor_operação }}</td>
+            <td>{{ operação.dc }}</td>
+        </tr>
     {% endfor %}
 </table>
 {% endblock %}

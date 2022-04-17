@@ -5,7 +5,8 @@
 <h2>Operações BMF:</h2>
 <table class="table">
     <tr>
-        <th>Nr Nota:</th>
+        <th>Nota:</th>
+        <th>Data:</th>
         <th>Folha:</th>
         <th>C/V:</th>
         <th>Mercadoria:</th>
@@ -17,19 +18,20 @@
         <th>D/C:</th>
         <th>Taxa operacional:</th>
     </tr>
-    {% for resultado in messages %}
+    {% for operação in operações %}
     <tr>
-        <td>{{ resultado.folhas_bmf.notas_bmf.nr_nota }}</td>
-        <td>{{ resultado.folhas_bmf.folha }}</td>
-        <td>{{ resultado.cv }}</td>
-        <td>{{ resultado.mercadoria }}</td>
-        <td>{{ resultado.vencimento }}</td>
-        <td>{{ resultado.quantidade }}</td>
-        <td>{{ resultado.preço_ajuste }}</td>
-        <td>{{ resultado.tipo_negócio }}</td>
-        <td>{{ resultado.valor_operação }}</td>
-        <td>{{ resultado.dc }}</td>
-        <td>{{ resultado.taxa_operacional }}</td>
+        <td>{{ operação.folhas_bmf.notas_bmf.nr_nota }}</td>
+        <td>{{ operação.folhas_bmf.notas_bmf.data_pregão }}</td>
+        <td>{{ operação.folhas_bmf.folha }}</td>
+        <td>{{ operação.cv}}</td>
+        <td>{{ operação.mercadoria }}</td>
+        <td>{{ operação.vencimento }}</td>
+        <td>{{ operação.quantidade }}</td>
+        <td>R$ {{ operação.preço_ajuste }}</td>
+        <td>{{ operação.tipo_negócio }}</td>
+        <td>R$ {{ operação.valor_operação }}</td>
+        <td>{{ operação.dc }}</td>
+        <td>R$ {{ operação.taxa_operacional }}</td>
     </tr>
     {% endfor %}
 </table>

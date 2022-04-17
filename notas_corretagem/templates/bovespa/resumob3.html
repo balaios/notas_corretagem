@@ -6,8 +6,8 @@
 <table class="table">
     <tr>
         <th>Nota:</th>
-        <th>Folha:</th>
         <th>Data:</th>
+        <th>Folhas:</th>
         <th>Vendas à vista:</th>
         <th>Compras à vista:</th>
         <th>Taxa de liquidação:</th>
@@ -16,19 +16,21 @@
         <th>I.R.R.F:</th>
         <th>Valor:</th>
     </tr>
-    {% for resultado in messages %}
-    <tr>
-        <td>{{ resultado.nr_nota }}</td>
-        <td>{{ resultado.folha }}</td>
-        <td>{{ resultado.data_pregão }}</td>
-        <td>{{ resultado.vendas_vista }}</td>
-        <td>{{ resultado.compras_vista }}</td>
-        <td>{{ resultado.taxa_liquidação }}</td>
-        <td>{{ resultado.taxa_registro }}</td>
-        <td>{{ resultado.emolumentos }}</td>
-        <td>{{ resultado.irrf }}</td>
-        <td>{{ resultado.líquido }}</td>
-    </tr>
+    {% for folha in folhas %}
+        {% if folha.líquido != "" %}
+            <tr>
+                <td>{{ folha.notas_bovespa.nr_nota }}</td>
+                <td>{{ folha.notas_bovespa.data_pregão }}</td>
+                <td>{{ folha.folha }}</td>
+                <td>R$ {{ folha.vendas_vista }}</td>
+                <td>R$ {{ folha.compras_vista }}</td>
+                <td>R$ {{ folha.taxa_liquidação }}</td>
+                <td>R$ {{ folha.taxa_registro }}</td>
+                <td>R$ {{ folha.emolumentos }}</td>
+                <td>R$ {{ folha.irrf }}</td>
+                <td>R$ {{ folha.líquido }}</td>
+            </tr>
+        {% endif %}
     {% endfor %}
 </table>
 {% endblock %}

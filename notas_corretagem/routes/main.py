@@ -22,7 +22,6 @@ def add():
 
     if form.validate_on_submit():
         pdfs = form.pdfs.data
-       
         for pdf in pdfs:
             pdf.save("notas_corretagem/uploads/" + pdf.filename)
             principal("notas_corretagem/uploads/" + pdf.filename)
@@ -51,33 +50,33 @@ def declaração():
 @main.route("/operacoesbmf")
 def operacaobmf():
 
-    messages = Operaçõesbmf.query.join(Folhasbmf).join(Notasbmf).all()
+    operações = Operaçõesbmf.query.all()
 
-    return render_template("bmf/operaçõesbmf.html", messages=messages)
+    return render_template("bmf/operaçõesbmf.html", operações=operações)
 
 
 @main.route("/resumobmf")
 def resumobmf():
 
-    messages = Folhasbmf.query.all()
+    folhas = Folhasbmf.query.all()
 
-    return render_template("bmf/resumobmf.html", messages=messages)
+    return render_template("bmf/resumobmf.html", folhas=folhas)
 
 
 @main.route("/operacoesb3")
 def operacaob3():
 
-    messages = Operaçõesbovespa.query.join(Folhasbovespa).join(Notasbovespa).all()
+    operações = Operaçõesbovespa.query.all()
 
-    return render_template("bovespa/operaçõesb3.html", messages=messages)
+    return render_template("bovespa/operaçõesb3.html", operações=operações)
 
 
 @main.route("/resumob3")
 def resumob3():
 
-    messages = Folhasbovespa.query.all()
+    folhas = Folhasbovespa.query.all()
 
-    return render_template("bovespa/resumob3.html", messages=messages)
+    return render_template("bovespa/resumob3.html", folhas=folhas)
 
 
 @main.route("/sucesso")
