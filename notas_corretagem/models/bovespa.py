@@ -1,7 +1,7 @@
 from ..extensions import db
 
 
-class Notasbovespa(db.Model):
+class NotasBovespa(db.Model):
     __tablename__ = "notas_bovespa"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -10,10 +10,10 @@ class Notasbovespa(db.Model):
     data_pregão = db.Column(db.String(40))
     cnpj_cpf = db.Column(db.String(40))
     código_cliente = db.Column(db.String(40))
-    folhas_bovespa = db.relationship("Folhasbovespa", backref="notas_bovespa", lazy=True)
+    folhas_bovespa = db.relationship("FolhasBovespa", backref="notas_bovespa", lazy=True)
 
 
-class Folhasbovespa(db.Model):
+class FolhasBovespa(db.Model):
     __tablename__ = "folhas_bovespa"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -44,11 +44,11 @@ class Folhasbovespa(db.Model):
     total_custos_despesas = db.Column(db.String(40))
     líquido = db.Column(db.String(40))
     operações_bovespa = db.relationship(
-        "Operaçõesbovespa", backref="folhas_bovespa", lazy=True
+        "OperaçõesBovespa", backref="folhas_bovespa", lazy=True
     )
 
 
-class Operaçõesbovespa(db.Model):
+class OperaçõesBovespa(db.Model):
     __tablename__ = "operações_bovespa"
 
     id = db.Column(db.Integer, primary_key=True)

@@ -1,23 +1,22 @@
 from flask import Blueprint, jsonify, request
 
 from ..extensions import db
-from ..models.bmf import Folhasbmf, Notasbmf, Operaçõesbmf
-from ..models.bovespa import Folhasbovespa, Notasbovespa, Operaçõesbovespa
+from ..models.bmf import FolhasBmf, OperaçõesBmf
+from ..models.bovespa import FolhasBovespa, OperaçõesBovespa
 from ..models.upload import Upload
 from ..pdf import principal
-from ..schemas.bmf import FolhasbmfSchema, NotasbmfSchema, OperaçõesbmfSchema
-from ..schemas.bovespa import (FolhasbovespaSchema, NotasbovespaSchema,
-                               OperaçõesbovespaSchema)
+from ..schemas.bmf import OperaçõesBmfSchema, FolhasBmfSchema
+from ..schemas.bovespa import OperaçõesBovespaSchema, FolhasBovespaSchema
 
 api = Blueprint("api", __name__, url_prefix="/api")
 
 
-@api.route("/")
+@api.get("/")
 def index():
     return jsonify({"hello": "world"})
 
 
-@api.route("/add", methods=["POST"])
+@api.post("/add/")
 def add():
     pdfs = request.files.getlist("pdfs")
     for pdf in pdfs:
@@ -30,47 +29,45 @@ def add():
     return jsonify({"status": "ok"})
 
 
-@api.route("/operacoesbmf")
+@api.get("/operacoesbmf/")
 def operacaobmf():
 
-    messages = Operaçõesbmf.query.join(Folhasbmf).join(Notasbmf).all()
+    operações = OperaçõesBmf.query.all()
 
-    operacoesbmf_schema = OperaçõesbmfSchema(many=True)
-    data = operacoesbmf_schema.dump(messages)
+    schema = OperaçõesBmfSchema(many=True)
+    data = schema.dump(operações)
 
     return jsonify({"data": data})
 
 
-@api.route("/resumobmf")
+@api.get("/resumobmf/")
 def resumobmf():
 
-    messages = Operaçõesbmf.query.join(Folhasbmf).join(Notasbmf).all()
+    folhas = FolhasBmf.query.all()
 
-    operacoesbmf_schema = OperaçõesbmfSchema(many=True)
-    data = operacoesbmf_schema.dump(messages)
+    schema = FolhasBmfSchema(many=True)
+    data = schema.dump(folhas)
 
     return jsonify({"data": data})
 
 
-@api.route("/operacoesb3")
+@api.get("/operacoesb3/")
 def operacaob3():
 
-    messages = Operaçõesbmf.query.join(Folhasbmf).join(Notasbmf).all()
+    operações = OperaçõesBovespa.query.all()
 
-    operacoesbmf_schema = OperaçõesbmfSchema(many=True)
-    data = operacoesbmf_schema.dump(messages)
+    schema = OperaçõesBovespaSchema(many=True)
+    data = schema.dump(operações)
 
     return jsonify({"data": data})
 
 
-@api.route("/resumob3")
+@api.get("/resumob3/")
 def resumob3():
 
-    messages = Operaçõesbmf.query.join(Folhasbmf).join(Notasbmf).all()
+    folhas = FolhasBovespa.query.all()
 
-    operacoesbmf_schema = OperaçõesbmfSchema(many=True)
-    data = operacoesbmf_schema.dump(messages)
+    schema = FolhasBovespaSchema(many=True)
+    data = schema.dump(folhas)
 
     return jsonify({"data": data})
-
-

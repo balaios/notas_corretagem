@@ -2,8 +2,8 @@ from pdfminer.high_level import extract_pages
 from pdfminer.layout import LAParams, LTTextBoxHorizontal
 
 from .extensions import db
-from .models.bmf import Folhasbmf, Notasbmf, Operaçõesbmf
-from .models.bovespa import Folhasbovespa, Notasbovespa, Operaçõesbovespa
+from .models.bmf import FolhasBmf, NotasBmf, OperaçõesBmf
+from .models.bovespa import FolhasBovespa, NotasBovespa, OperaçõesBovespa
 
 cabeçalho_bmf = {
     "número_corretora": (480, 520, 90, 110),
@@ -116,9 +116,9 @@ def principal(arquivo_pdf):
             objetos, tamanho_eixo_y
         )
         if "BM&F" in tipo_da_nota:
-            banco_notas = Notasbmf
-            banco_folhas = Folhasbmf
-            banco_operações = Operaçõesbmf
+            banco_notas = NotasBmf
+            banco_folhas = FolhasBmf
+            banco_operações = OperaçõesBmf
             cabeçalho = seleciona_textos_nota(
                 dicionario_bbox_texto, cabeçalho_bmf
             )
@@ -128,9 +128,9 @@ def principal(arquivo_pdf):
             )
 
         elif "BOVESPA" in tipo_da_nota:
-            banco_notas = Notasbovespa
-            banco_folhas = Folhasbovespa
-            banco_operações = Operaçõesbovespa
+            banco_notas = NotasBovespa
+            banco_folhas = FolhasBovespa
+            banco_operações = OperaçõesBovespa
             cabeçalho = seleciona_textos_nota(
                 dicionario_bbox_texto, cabeçalho_b3
             )

@@ -1,7 +1,7 @@
 from ..extensions import db
 
 
-class Notasbmf(db.Model):
+class NotasBmf(db.Model):
     __tablename__ = "notas_bmf"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -10,10 +10,10 @@ class Notasbmf(db.Model):
     data_pregão = db.Column(db.String(40))
     cnpj_cpf = db.Column(db.String(40))
     código_cliente = db.Column(db.String(40))
-    folhas_bmf = db.relationship("Folhasbmf", backref="notas_bmf", lazy=True)
+    folhas_bmf = db.relationship("FolhasBmf", backref="notas_bmf", lazy=True)
 
 
-class Folhasbmf(db.Model):
+class FolhasBmf(db.Model):
     __tablename__ = "folhas_bmf"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -40,10 +40,10 @@ class Folhasbmf(db.Model):
     total_conta_normal = db.Column(db.String(40))
     total_líquido = db.Column(db.String(40))
     total_líquido_nota = db.Column(db.String(40))
-    operações_bmf = db.relationship("Operaçõesbmf", backref="folhas_bmf", lazy=False)
+    operações_bmf = db.relationship("OperaçõesBmf", backref="folhas_bmf", lazy=False)
 
 
-class Operaçõesbmf(db.Model):
+class OperaçõesBmf(db.Model):
     __tablename__ = "operações_bmf"
 
     id = db.Column(db.Integer, primary_key=True)

@@ -4,6 +4,8 @@ from flask import Flask
 
 from .extensions import db, ma, migrate
 from .routes.api import api
+from .routes.bmf import bmf
+from .routes.bovespa import bovespa
 from .routes.main import main
 
 
@@ -25,6 +27,8 @@ def create_app():
     ma.init_app(app)
 
     app.register_blueprint(api)
+    app.register_blueprint(bmf)
+    app.register_blueprint(bovespa)
     app.register_blueprint(main)
 
     return app

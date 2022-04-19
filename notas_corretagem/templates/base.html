@@ -16,11 +16,10 @@
             <ul class="navbar-nav">
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('main.index') }}">Home</a>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('main.add') }}">Add</a>
-                <li class="nav-item"><a class="nav-link" href="{{ url_for('main.declaração') }}">Declaração</a>
-                <li class="nav-item"><a class="nav-link" href="{{ url_for('main.operacaobmf') }}">Operações BMF</a>
-                <li class="nav-item"><a class="nav-link" href="{{ url_for('main.resumobmf') }}">Resumo BMF</a>
-                <li class="nav-item"><a class="nav-link" href="{{ url_for('main.operacaob3') }}">Operações B3</a>
-                <li class="nav-item"><a class="nav-link" href="{{ url_for('main.resumob3') }}">Resumo B3</a>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('bmf.operacaobmf') }}">Operações BMF</a>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('bmf.resumobmf') }}">Resumo BMF</a>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('bovespa.operacaob3') }}">Operações B3</a>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('bovespa.resumob3') }}">Resumo B3</a>
             </ul>
         </div>
     </nav>
