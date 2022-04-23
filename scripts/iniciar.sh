@@ -1,5 +1,6 @@
 #!/usr/bin/bash
 
+psql -U postgres -c  "CREATE DATABASE notas_corretagem;"
 psql -U postgres -d notas_corretagem -c "DROP TABLE public.alembic_version;"
 psql -U postgres -d notas_corretagem -c "DROP TABLE public.notas_bmf CASCADE;"
 psql -U postgres -d notas_corretagem -c "DROP TABLE public.notas_bovespa CASCADE;"
