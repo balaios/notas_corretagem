@@ -7,7 +7,7 @@ class NotasBmf(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     número_corretora = db.Column(db.String(40))
     nr_nota = db.Column(db.String(40))
-    data_pregão = db.Column(db.String(40))
+    data_pregão = db.Column(db.Date)
     cnpj_cpf = db.Column(db.String(40))
     código_cliente = db.Column(db.String(40))
     folhas_bmf = db.relationship("FolhasBmf", backref="notas_bmf", lazy=True)
