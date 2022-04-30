@@ -68,6 +68,8 @@ folha_b3 = {
     "operações_termo": (200, 300, 505, 520),
     "valor_operações_títulos_públ": (200, 300, 515, 525),
     "valor_operações": (200, 300, 525, 545),
+    "irrf_day_trade": (30, 300, 610, 640),
+    "irrf_projeção": (30, 300, 610, 640),
     "valor_líquido_operações": (450, 560, 465, 480),
     "taxa_liquidação": (450, 560, 475, 490),
     "taxa_registro": (450, 560, 485, 500),
@@ -98,6 +100,8 @@ operações_b3 = {
     "preço_ajuste": (390, 450, 250, 450),
     "valor_operação": (450, 550, 250, 450),
     "dc": (545, 560, 250, 450),
+    "preço_médio_compra": (0, 0, 0, 0),
+    "preço_médio_venda": (0, 0, 0, 0),
 }
 
 
@@ -144,6 +148,7 @@ def principal(arquivo_pdf):
         tratar_texto(cabeçalho)
         tratar_texto(folha)
         tratar_texto(operações)
+        preços_bovespa(operações)
         inserir_banco_de_dados(
             cabeçalho,
             banco_notas,
@@ -218,7 +223,11 @@ def tratar_texto(conteudo):
                 .replace("-", "")
                 .strip()
             )
-            if "folha" in conteudo:
+            if chave == "irrf_day_trade":
+                conteudo[chave] = texto.split(" ")[5]
+            elif chave == "irrf_projeção":
+                conteudo[chave] = texto.split(" ")[-1]
+            elif "folha" in conteudo:
                 if "D" in texto or "C" in texto:
                     if "D" in texto:
                         conteudo[chave] = str(float(texto.replace("D", "")) * -1)
@@ -229,6 +238,26 @@ def tratar_texto(conteudo):
             else:
                 conteudo[chave] = str(texto)
     return conteudo
+
+
+def preços_bovespa(operações):
+
+    for chave, operação in operações.items():
+        valor = float(operação['preço_ajuste'])
+        if "D" in operação.get("obs"):
+            if operação.get("cv") == "C":
+                custo = valor * 0.005
+                operações[chave]['preço_médio_compra'] = valor + custo
+            elif operação.get("cv") == "V":
+                custo = valor * 0.025
+                operações[chave]['preço_médio_venda'] = valor + custo
+        else:
+            if operação.get("cv") == "C":
+                custo = valor * 0.005
+                operações[chave]['preço_médio_compra'] = valor + custo
+            elif operação.get("cv") == "V":
+                custo = valor * 0.018
+                operações[chave]['preço_médio_venda'] = valor + custo
 
 
 def inserir_banco_de_dados(
