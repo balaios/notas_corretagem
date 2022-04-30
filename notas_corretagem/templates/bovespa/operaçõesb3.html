@@ -11,10 +11,8 @@
         <th>C/V:</th>
         <th>Tipo:</th>
         <th>Titulo:</th>
+        <th>Day trade</th>
         <th>Quantidade:</th>
-        <th>Preço:</th>
-        <th>Valor da operação:</th>
-        <th>D/C:</th>
         <th>Preço médio de compra</th>
         <th>Preço médio de venda</th>
     </tr>
@@ -26,10 +24,8 @@
             <td>{{ operação.cv }}</td>
             <td>{{ operação.tipo_mercado }}</td>
             <td>{{ operação.especificação_título }}</td>
+            <td>{{ operação.obs }}</td>
             <td>{{ operação.quantidade }}</td>
-            <td>R$ {{ operação.preço_ajuste }}</td>
-            <td>R$ {{ operação.valor_operação }}</td>
-            <td>{{ operação.dc }}</td>
             {% if operação.cv == "C" %}
                 <td>R$ {{ operação.preço_médio_compra|round(2) }}</td>
                 <td> - </td>
