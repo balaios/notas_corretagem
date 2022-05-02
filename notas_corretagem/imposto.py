@@ -1,5 +1,4 @@
-def calcular_imposto(nota):    
-    
+def calcular_imposto(nota):
     notas = nota.query.all()
     papéis = {}
 
@@ -14,16 +13,16 @@ def calcular_imposto(nota):
 
                 if papéis.get(data):
                     if papéis[data].get(papel):
-                        papéis[data][papel]["quantidade"] += quantidade         
-                        papéis[data][papel]["preço"] += preço         
+                        papéis[data][papel]["quantidade"] += quantidade
+                        papéis[data][papel]["preço"] += preço
                     else:
                         papéis[data][papel] = dict()
-                        papéis[data][papel]["quantidade"] = quantidade         
-                        papéis[data][papel]["preço"] = preço 
-                        papéis[data][papel]["tipo"] = tipo  
+                        papéis[data][papel]["quantidade"] = quantidade
+                        papéis[data][papel]["preço"] = preço
+                        papéis[data][papel]["tipo"] = tipo
                 else:
                     papéis[data] = dict()
                     papéis[data][papel] = dict()
-                    papéis[data][papel]["quantidade"] = quantidade         
-                    papéis[data][papel]["preço"] = preço 
+                    papéis[data][papel]["quantidade"] = quantidade
+                    papéis[data][papel]["preço"] = preço
                     papéis[data][papel]["tipo"] = tipo
