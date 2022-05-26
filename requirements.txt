@@ -16,7 +16,7 @@ MarkupSafe==2.1.1
 marshmallow==3.15.0
 marshmallow-sqlalchemy==0.28.0
 packaging==21.3
-pdfminer.six==20220506
+pdfminer.six==20220524
 psycopg2-binary==2.9.3
 pycparser==2.21
 pyparsing==3.0.9
