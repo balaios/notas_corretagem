@@ -1,38 +1,41 @@
-{% extends 'base.html' %}
-
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 
 <h2>Operações BMF:</h2>
 <table class="table">
-    <tr>
-        <th>Nota:</th>
-        <th>Data:</th>
-        <th>Folha:</th>
-        <th>C/V:</th>
-        <th>Mercadoria:</th>
-        <th>Vencimento:</th>
-        <th>Quantidade:</th>
-        <th>Preço/Ajuste:</th>
-        <th>Tipo negócio:</th>
-        <th>Valor da operação:</th>
-        <th>D/C:</th>
-        <th>Taxa operacional:</th>
-    </tr>
-    {% for operação in operações %}
-    <tr>
-        <td>{{ operação.folhas_bmf.notas_bmf.nr_nota }}</td>
-        <td>{{ operação.folhas_bmf.notas_bmf.data_pregão }}</td>
-        <td>{{ operação.folhas_bmf.folha }}</td>
-        <td>{{ operação.cv}}</td>
-        <td>{{ operação.mercadoria }}</td>
-        <td>{{ operação.vencimento }}</td>
-        <td>{{ operação.quantidade }}</td>
-        <td>R$ {{ operação.preço_ajuste }}</td>
-        <td>{{ operação.tipo_negócio }}</td>
-        <td>R$ {{ operação.valor_operação }}</td>
-        <td>{{ operação.dc }}</td>
-        <td>R$ {{ operação.taxa_operacional }}</td>
-    </tr>
-    {% endfor %}
+  <tr>
+    <th>Nota:</th>
+    <th>Data:</th>
+    <th>Folha:</th>
+    <th>C/V:</th>
+    <th>Mercadoria:</th>
+    <th>Vencimento:</th>
+    <th>Quantidade:</th>
+    <th>Preço/Ajuste:</th>
+    <th>Tipo negócio:</th>
+    <th>Valor da operação:</th>
+    <th>D/C:</th>
+    <th>Taxa operacional:</th>
+    <th>Preço médio de compra</th>
+    <th>Preço médio de venda</th>
+    <th>Lucro</th>
+  </tr>
+  {% for operacao in operações %}
+  <tr>
+    <td>{{ operacao.folha_bmf.nota_bmf.nr_nota }}</td>
+    <td>{{ operacao.folha_bmf.nota_bmf.data_pregao }}</td>
+    <td>{{ operacao.folha_bmf.folha }}</td>
+    <td>{{ operacao.cv}}</td>
+    <td>{{ operacao.mercadoria }}</td>
+    <td>{{ operacao.vencimento }}</td>
+    <td>{{ operacao.quantidade }}</td>
+    <td>R$ {{ operacao.preco_ajuste }}</td>
+    <td>{{ operacao.tipo_negocio }}</td>
+    <td>R$ {{ operacao.valor_operacao }}</td>
+    <td>{{ operacao.dc }}</td>
+    <td>R$ {{ operacao.taxa_operacional }}</td>
+    <td>R$ {{ operacao.preco_medio_compra }}</td>
+    <td>R$ {{ operacao.preco_medio_venda }}</td>
+  </tr>
+  {% endfor %}
 </table>
 {% endblock %}

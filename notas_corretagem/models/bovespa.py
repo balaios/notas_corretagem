@@ -1,70 +1,70 @@
 from ..extensions import db
 
 
-class NotasBovespa(db.Model):
-    __tablename__ = "notas_bovespa"
+class NotaBovespa(db.Model):
+    __tablename__ = "nota_bovespa"
 
     id = db.Column(db.Integer, primary_key=True)
-    número_corretora = db.Column(db.String(40))
+    numero_corretora = db.Column(db.String(40))
     nr_nota = db.Column(db.String(40))
-    data_pregão = db.Column(db.Date)
+    data_pregao = db.Column(db.Date)
     cnpj_cpf = db.Column(db.String(40))
-    código_cliente = db.Column(db.String(40))
-    folhas_bovespa = db.relationship("FolhasBovespa", backref="notas_bovespa", lazy=True)
+    codigo_cliente = db.Column(db.String(40))
+    folha_bovespa = db.relationship("FolhaBovespa", backref="nota_bovespa", lazy=True)
 
 
-class FolhasBovespa(db.Model):
-    __tablename__ = "folhas_bovespa"
+class FolhaBovespa(db.Model):
+    __tablename__ = "folha_bovespa"
 
     id = db.Column(db.Integer, primary_key=True)
-    notas_id = db.Column(db.Integer, db.ForeignKey("notas_bovespa.id"))
+    nota_id = db.Column(db.Integer, db.ForeignKey("nota_bovespa.id"))
     folha = db.Column(db.String(40))
-    debêntures = db.Column(db.String(40))
+    debentures = db.Column(db.String(40))
     vendas_vista = db.Column(db.String(40))
     compras_vista = db.Column(db.String(40))
-    compra_opções = db.Column(db.String(40))
-    venda_opções = db.Column(db.String(40))
-    operações_termo = db.Column(db.String(40))
-    valor_operações_títulos_públ = db.Column(db.String(40))
-    valor_operações = db.Column(db.String(40))
+    compra_opcoes = db.Column(db.String(40))
+    venda_opcoes = db.Column(db.String(40))
+    operacoes_termo = db.Column(db.String(40))
+    valor_operacoes_títulos_públ = db.Column(db.String(40))
+    valor_operacoes = db.Column(db.String(40))
     irrf_day_trade = db.Column(db.String(40))
-    irrf_projeção = db.Column(db.String(40))
-    valor_líquido_operações = db.Column(db.String(40))
-    taxa_liquidação = db.Column(db.String(40))
+    irrf_projecao = db.Column(db.String(40))
+    valor_liquido_operacoes = db.Column(db.String(40))
+    taxa_liquidacao = db.Column(db.String(40))
     taxa_registro = db.Column(db.String(40))
     total_clbc = db.Column(db.String(40))
-    taxa_termo_opções = db.Column(db.String(40))
+    taxa_termo_opcoes = db.Column(db.String(40))
     taxa_ana = db.Column(db.String(40))
     emolumentos = db.Column(db.String(40))
     total_bovespa = db.Column(db.String(40))
     taxa_operacional = db.Column(db.String(40))
-    execução = db.Column(db.String(40))
-    taxa_custódia = db.Column(db.String(40))
+    execucao = db.Column(db.String(40))
+    taxa_custodia = db.Column(db.String(40))
     impostos = db.Column(db.String(40))
     irrf = db.Column(db.String(40))
     outros = db.Column(db.String(40))
     total_custos_despesas = db.Column(db.String(40))
-    líquido = db.Column(db.String(40))
-    operações_bovespa = db.relationship(
-        "OperaçõesBovespa", backref="folhas_bovespa", lazy=True
+    liquido = db.Column(db.String(40))
+    operacao_bovespa = db.relationship(
+        "OperacaoBovespa", backref="folha_bovespa", lazy=True
     )
 
 
-class OperaçõesBovespa(db.Model):
-    __tablename__ = "operações_bovespa"
+class OperacaoBovespa(db.Model):
+    __tablename__ = "operacao_bovespa"
 
     id = db.Column(db.Integer, primary_key=True)
-    folhas_id = db.Column(db.Integer, db.ForeignKey("folhas_bovespa.id"))
+    folha_id = db.Column(db.Integer, db.ForeignKey("folha_bovespa.id"))
     q = db.Column(db.String(40))
-    negociação = db.Column(db.String(40))
+    negociacao = db.Column(db.String(40))
     cv = db.Column(db.String(40))
     tipo_mercado = db.Column(db.String(40))
     prazo = db.Column(db.String(40))
-    especificação_título = db.Column(db.String(40))
+    especificacao_titulo = db.Column(db.String(40))
     obs = db.Column(db.String(40))
     quantidade = db.Column(db.String(40))
-    preço_ajuste = db.Column(db.String(40))
-    valor_operação = db.Column(db.String(40))
+    preco_ajuste = db.Column(db.String(40))
+    valor_operacao = db.Column(db.String(40))
     dc = db.Column(db.String(40))
-    preço_médio_venda = db.Column(db.Float)
-    preço_médio_compra = db.Column(db.Float)
+    preco_medio_venda = db.Column(db.Float)
+    preco_medio_compra = db.Column(db.Float)

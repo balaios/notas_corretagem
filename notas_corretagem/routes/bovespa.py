@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template
 
-from ..models.bovespa import FolhasBovespa, OperaçõesBovespa
+from ..models.bovespa import FolhaBovespa, OperacaoBovespa
 
 
 bovespa = Blueprint("bovespa", __name__)
@@ -9,14 +9,14 @@ bovespa = Blueprint("bovespa", __name__)
 @bovespa.get("/operacoesb3")
 def operacaob3():
 
-    operações = OperaçõesBovespa.query.all()
+    operacoes = OperacaoBovespa.query.all()
 
-    return render_template("bovespa/operaçõesb3.html", operações=operações)
+    return render_template("bovespa/operaçõesb3.html", operacoes=operacoes)
 
 
 @bovespa.get("/resumob3")
 def resumob3():
 
-    folhas = FolhasBovespa.query.all()
+    folhas = FolhaBovespa.query.all()
 
     return render_template("bovespa/resumob3.html", folhas=folhas)

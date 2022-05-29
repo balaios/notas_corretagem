@@ -1,17 +1,17 @@
 from ..extensions import ma
-from ..models.bovespa import FolhasBovespa, NotasBovespa, OperaçõesBovespa
+from ..models.bovespa import FolhaBovespa, NotaBovespa, OperacaoBovespa
 
 
-class NotasBovespaSchema(ma.SQLAlchemyAutoSchema):
+class NotaBovespaSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
-        model = NotasBovespa
-        
+        model = NotaBovespa
 
-class FolhasBovespaSchema(ma.SQLAlchemyAutoSchema):
+
+class FolhaBovespaSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
-        model = FolhasBovespa
+        model = FolhaBovespa
 
 
-class OperaçõesBovespaSchema(ma.SQLAlchemyAutoSchema):
+class OperacaoBovespaSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
-        model = OperaçõesBovespa
+        model = OperacaoBovespa

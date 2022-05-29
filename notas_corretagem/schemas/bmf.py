@@ -1,18 +1,17 @@
 from ..extensions import ma
-from ..models.bmf import FolhasBmf, NotasBmf, OperaçõesBmf
+from ..models.bmf import FolhaBmf, NotaBmf, OperacaoBmf
 
 
-class NotasBmfSchema(ma.SQLAlchemyAutoSchema):
+class NotaBmfSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
-        model = NotasBmf
-        
+        model = NotaBmf
 
-class FolhasBmfSchema(ma.SQLAlchemyAutoSchema):
+
+class FolhaBmfSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
-        model = FolhasBmf
+        model = FolhaBmf
 
 
-class OperaçõesBmfSchema(ma.SQLAlchemyAutoSchema):
+class OperacaoBmfSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
-        model = OperaçõesBmf
-        
+        model = OperacaoBmf

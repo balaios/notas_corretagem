@@ -1,29 +1,29 @@
 from ..extensions import db
 
 
-class NotasBmf(db.Model):
-    __tablename__ = "notas_bmf"
+class NotaBmf(db.Model):
+    __tablename__ = "nota_bmf"
 
     id = db.Column(db.Integer, primary_key=True)
-    número_corretora = db.Column(db.String(40))
+    numero_corretora = db.Column(db.String(40))
     nr_nota = db.Column(db.String(40))
-    data_pregão = db.Column(db.Date)
+    data_pregao = db.Column(db.Date)
     cnpj_cpf = db.Column(db.String(40))
-    código_cliente = db.Column(db.String(40))
-    folhas_bmf = db.relationship("FolhasBmf", backref="notas_bmf", lazy=True)
+    codigo_cliente = db.Column(db.String(40))
+    folhas_bmf = db.relationship("FolhaBmf", backref="nota_bmf", lazy=True)
 
 
-class FolhasBmf(db.Model):
-    __tablename__ = "folhas_bmf"
+class FolhaBmf(db.Model):
+    __tablename__ = "folha_bmf"
 
     id = db.Column(db.Integer, primary_key=True)
-    notas_id = db.Column(db.Integer, db.ForeignKey("notas_bmf.id"))
+    nota_id = db.Column(db.Integer, db.ForeignKey("nota_bmf.id"))
     folha = db.Column(db.String(40))
-    venda_disponível = db.Column(db.String(40))
-    compra_disponível = db.Column(db.String(40))
-    venda_opções = db.Column(db.String(40))
-    compra_opções = db.Column(db.String(40))
-    valor_negócios = db.Column(db.String(40))
+    venda_disponivel = db.Column(db.String(40))
+    compra_disponivel = db.Column(db.String(40))
+    venda_opcoes = db.Column(db.String(40))
+    compra_opcoes = db.Column(db.String(40))
+    valor_negocios = db.Column(db.String(40))
     irrf = db.Column(db.String(40))
     irrf_day_trade_proj = db.Column(db.String(40))
     taxa_operacional = db.Column(db.String(40))
@@ -31,29 +31,31 @@ class FolhasBmf(db.Model):
     taxa_registro_bmf = db.Column(db.String(40))
     outros_custos = db.Column(db.String(40))
     impostos = db.Column(db.String(40))
-    ajuste_posição = db.Column(db.String(40))
+    ajuste_posicao = db.Column(db.String(40))
     ajuste_day_trade = db.Column(db.String(40))
     total_despesas = db.Column(db.String(40))
     outros = db.Column(db.String(40))
     irrf_operacional = db.Column(db.String(40))
     total_conta_investimento = db.Column(db.String(40))
     total_conta_normal = db.Column(db.String(40))
-    total_líquido = db.Column(db.String(40))
-    total_líquido_nota = db.Column(db.String(40))
-    operações_bmf = db.relationship("OperaçõesBmf", backref="folhas_bmf", lazy=False)
+    total_liquido = db.Column(db.String(40))
+    total_liquido_nota = db.Column(db.String(40))
+    operacoes_bmf = db.relationship("OperacaoBmf", backref="folha_bmf", lazy=False)
 
 
-class OperaçõesBmf(db.Model):
-    __tablename__ = "operações_bmf"
+class OperacaoBmf(db.Model):
+    __tablename__ = "operacao_bmf"
 
     id = db.Column(db.Integer, primary_key=True)
-    folhas_id = db.Column(db.Integer, db.ForeignKey("folhas_bmf.id"))
+    folha_id = db.Column(db.Integer, db.ForeignKey("folha_bmf.id"))
     cv = db.Column(db.String(40))
     mercadoria = db.Column(db.String(40))
     vencimento = db.Column(db.String(40))
     quantidade = db.Column(db.String(40))
-    preço_ajuste = db.Column(db.String(40))
-    tipo_negócio = db.Column(db.String(20), default=0)
-    valor_operação = db.Column(db.String(40))
+    preco_ajuste = db.Column(db.String(40))
+    tipo_negocio = db.Column(db.String(20))
+    valor_operacao = db.Column(db.String(40))
     dc = db.Column(db.String(40))
     taxa_operacional = db.Column(db.String(40))
+    preco_medio_compra = db.Column(db.Float, default=0.0)
+    preco_medio_venda = db.Column(db.Float, default=0.0)

@@ -1,12 +1,12 @@
 from flask import Blueprint, jsonify, request
 
 from ..extensions import db
-from ..models.bmf import FolhasBmf, OperaçõesBmf
-from ..models.bovespa import FolhasBovespa, OperaçõesBovespa
+from ..models.bmf import FolhaBmf, OperacaoBmf
+from ..models.bovespa import FolhaBovespa, OperacaoBovespa
 from ..models.upload import Upload
 from ..pdf import principal
-from ..schemas.bmf import OperaçõesBmfSchema, FolhasBmfSchema
-from ..schemas.bovespa import OperaçõesBovespaSchema, FolhasBovespaSchema
+from ..schemas.bmf import OperacaoBmfSchema, FolhaBmfSchema
+from ..schemas.bovespa import OperacaoBovespaSchema, FolhaBovespaSchema
 
 api = Blueprint("api", __name__, url_prefix="/api")
 
@@ -32,10 +32,10 @@ def add():
 @api.get("/operacoesbmf/")
 def operacaobmf():
 
-    operações = OperaçõesBmf.query.all()
+    operacoes = OperacaoBmf.query.all()
 
-    schema = OperaçõesBmfSchema(many=True)
-    data = schema.dump(operações)
+    schema = OperacaoBmfSchema(many=True)
+    data = schema.dump(operacoes)
 
     return jsonify({"data": data})
 
@@ -43,9 +43,9 @@ def operacaobmf():
 @api.get("/resumobmf/")
 def resumobmf():
 
-    folhas = FolhasBmf.query.all()
+    folhas = FolhaBmf.query.all()
 
-    schema = FolhasBmfSchema(many=True)
+    schema = FolhaBmfSchema(many=True)
     data = schema.dump(folhas)
 
     return jsonify({"data": data})
@@ -54,10 +54,10 @@ def resumobmf():
 @api.get("/operacoesb3/")
 def operacaob3():
 
-    operações = OperaçõesBovespa.query.all()
+    operacoes = OperacaoBovespa.query.all()
 
-    schema = OperaçõesBovespaSchema(many=True)
-    data = schema.dump(operações)
+    schema = OperacaoBovespaSchema(many=True)
+    data = schema.dump(operacoes)
 
     return jsonify({"data": data})
 
@@ -65,9 +65,9 @@ def operacaob3():
 @api.get("/resumob3/")
 def resumob3():
 
-    folhas = FolhasBovespa.query.all()
+    folhas = FolhaBovespa.query.all()
 
-    schema = FolhasBovespaSchema(many=True)
+    schema = FolhaBovespaSchema(many=True)
     data = schema.dump(folhas)
 
     return jsonify({"data": data})

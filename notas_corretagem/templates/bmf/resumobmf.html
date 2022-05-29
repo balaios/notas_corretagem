@@ -20,21 +20,21 @@
         <th>Total líquido da nota:</th>
     </tr>
     {% for folha in folhas %}
-        {% if folha.total_líquido_nota != "|" %}
+        {% if folha.total_liquido_nota != "|" %}
             <tr>
-                <td>{{ folha.notas_bmf.nr_nota }}</td>
+                <td>{{ folha.nota_bmf.nr_nota }}</td>
                 <td>{{ folha.folha }}</td>
-                <td>{{ folha.notas_bmf.data_pregão }}</td>
-                <td>R$ {{ folha.valor_negócios }}</td>
+                <td>{{ folha.nota_bmf.data_pregão }}</td>
+                <td>R$ {{ folha.valor_negocios }}</td>
                 <td>R$ {{ folha.irrf_day_trade_proj }}</td>
                 <td>R$ {{ folha.taxa_operacional }}</td>
                 <td>R$ {{ folha.taxas_bmf }}</td>
                 <td>R$ {{ folha.taxa_registro_bmf }}</td>
                 <td>R$ {{ folha.impostos }}</td>
-                <td>R$ {{ folha.ajuste_posição }}</td>
+                <td>R$ {{ folha.ajuste_posicao }}</td>
                 <td>R$ {{ folha.ajuste_day_trade }}</td>
                 <td>R$ {{ folha.total_despesas }}</td>
-                <td>R$ {{ folha.total_líquido_nota }}</td>
+                <td>R$ {{ folha.total_liquido_nota }}</td>
             </tr>
         {% endif %}
     {% endfor %}
