@@ -10,15 +10,6 @@ class NotaBmf(db.Model):
     data_pregao = db.Column(db.Date)
     cnpj_cpf = db.Column(db.String(40))
     codigo_cliente = db.Column(db.String(40))
-    folhas_bmf = db.relationship("FolhaBmf", backref="nota_bmf", lazy=True)
-
-
-class FolhaBmf(db.Model):
-    __tablename__ = "folha_bmf"
-
-    id = db.Column(db.Integer, primary_key=True)
-    nota_id = db.Column(db.Integer, db.ForeignKey("nota_bmf.id"))
-    folha = db.Column(db.String(40))
     venda_disponivel = db.Column(db.String(40))
     compra_disponivel = db.Column(db.String(40))
     venda_opcoes = db.Column(db.String(40))
@@ -40,14 +31,15 @@ class FolhaBmf(db.Model):
     total_conta_normal = db.Column(db.String(40))
     total_liquido = db.Column(db.String(40))
     total_liquido_nota = db.Column(db.String(40))
-    operacoes_bmf = db.relationship("OperacaoBmf", backref="folha_bmf", lazy=False)
+    operacao_bmf = db.relationship("OperacaoBmf", backref="nota_bmf", lazy=True)
 
 
 class OperacaoBmf(db.Model):
     __tablename__ = "operacao_bmf"
 
     id = db.Column(db.Integer, primary_key=True)
-    folha_id = db.Column(db.Integer, db.ForeignKey("folha_bmf.id"))
+    nota_id = db.Column(db.Integer, db.ForeignKey("nota_bmf.id"))
+    folha = db.Column(db.String(40))
     cv = db.Column(db.String(40))
     mercadoria = db.Column(db.String(40))
     vencimento = db.Column(db.String(40))

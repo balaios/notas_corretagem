@@ -5,16 +5,12 @@ from .extensions import db
 from .models.bmf import NotaBmf, OperacaoBmf
 from .models.bovespa import NotaBovespa, OperacaoBovespa
 
-cabecalho_bmf = {
+nota_bmf = {
     "numero_corretora": (480, 520, 90, 110),
     "nr_nota": (450, 490, 50, 70),
     "data_pregao": (520, 570, 50, 70),
     "cnpj_cpf": (460, 550, 130, 150),
     "codigo_cliente": (460, 550, 150, 170),
-}
-
-folha_bmf = {
-    "folha": (490, 520, 50, 70),
     "venda_disponivel": (110, 140, 630, 655),
     "compra_disponivel": (200, 250, 630, 655),
     "venda_opcoes": (330, 360, 630, 655),
@@ -39,6 +35,7 @@ folha_bmf = {
 }
 
 operacao_bmf = {
+    "folha": (490, 520, 50, 70),
     "cv": (30, 50, 182, 600),
     "mercadoria": (45, 90, 182, 600),
     "vencimento": (110, 160, 182, 600),
@@ -100,77 +97,76 @@ operacao_bovespa = {
 }
 
 
+tipo = {
+    "BMF": {
+        "cabecalho": nota_bmf,
+        "operacao": operacao_bmf,
+        "nota_db": NotaBmf,
+        "operacao_db": OperacaoBmf,
+    },
+    "BOVESPA": {
+        "cabecalho": nota_bovespa,
+        "operacao": operacao_bovespa,
+        "nota_db": NotaBovespa,
+        "operacao_db": OperacaoBovespa,
+    },
+}
+
+
 def ler_pdf(arquivo_pdf):
     laparams = LAParams(char_margin=0.5, line_margin=0.0)
     for layout in extract_pages(arquivo_pdf, laparams=laparams):
-        objetos = [obj for obj in layout._objs if isinstance(obj, LTTextBoxHorizontal)]
-
-        tipo_da_nota = verificar_tipo_da_nota(objetos)
-        dicionario_bbox_texto = criar_dicionario_bbox_texto(objetos, layout.y1)
-        if "BM&F" in tipo_da_nota:
-            banco_nota = NotaBmf
-            banco_operacao = OperacaoBmf
-            cabeçalho = seleciona_textos_nota(dicionario_bbox_texto, cabecalho_bmf)
-            operacao = seleciona_textos_nota(dicionario_bbox_texto, operacao_bmf)
-
-        elif "BOVESPA" in tipo_da_nota:
-            banco_nota = NotaBovespa
-            banco_operacao = OperacaoBovespa
-            cabeçalho = seleciona_textos_nota(dicionario_bbox_texto, nota_bovespa)
-            operacao = seleciona_textos_nota(dicionario_bbox_texto, operacao_bovespa)
-        else:
-            break
-
-        tratar_texto(cabeçalho)
-        inserir_banco_de_dados(
-            cabeçalho,
-            banco_nota,
-            operacao,
-            banco_operacao,
-        )
+        bbox_texto = criar_bbox_texto(layout)
+        tipo_nota = verificar_tipo_da_nota(bbox_texto)
+        nota = seleciona_textos_nota(bbox_texto, tipo_nota, "cabecalho")
+        operacao = seleciona_textos_nota(bbox_texto, tipo_nota, "operacao")
+        tratar_texto(nota)
+        inserir_banco_de_dados(nota, operacao, tipo_nota)
 
 
-def verificar_tipo_da_nota(objetos):
-    for obj in objetos:
-        if "BM&F" in obj.get_text():
-            return "BM&F"
-        if "BOVESPA" in obj.get_text():
+def criar_bbox_texto(layout):
+    bbox_texto = {}
+    for obj in layout._objs:
+        if isinstance(obj, LTTextBoxHorizontal):
+            x0, y1, x1, y0 = obj.bbox
+            bbox_texto[
+                int(x0),
+                int(x1),
+                int(layout.y1 - y0),
+                int(layout.y1 - y1),
+            ] = obj.get_text().strip()
+    return bbox_texto
+
+
+def verificar_tipo_da_nota(layout):
+    for obj in layout.values():
+        if "BM&F" in obj:
+            return "BMF"
+        if "BOVESPA" in obj:
             return "BOVESPA"
-    return "Não identificado"
+    return "Não encontrado"
 
 
-def criar_dicionario_bbox_texto(objetos, tamanho_eixo_y):
-    bbox = {}
-    for obj in objetos:
-        x0, y1, x1, y0 = obj.bbox
-        bbox[
-            int(x0),
-            int(x1),
-            int(tamanho_eixo_y - y0),
-            int(tamanho_eixo_y - y1),
-        ] = obj.get_text().strip()
-    return bbox
-
-
-def seleciona_textos_nota(dicionario_bbox_texto, posições):
-    textos_da_nota = dict()
+def seleciona_textos_nota(dicionario_bbox_texto, tipo_nota, extra):
+    textos_da_nota = {}
     folha = 0
+    posicoes_textos = tipo[tipo_nota][extra]
     for bbox, texto in dicionario_bbox_texto.items():
-        for campo, bboxmodelo in posições.items():
+        for campo, bboxmodelo in posicoes_textos.items():
             if (
                 bbox[0] >= bboxmodelo[0]
                 and bbox[1] <= bboxmodelo[1]
                 and bbox[2] >= bboxmodelo[2]
                 and bbox[3] <= bboxmodelo[3]
             ):
-                if "cv" in posições:
+                if "cv" in posicoes_textos:
                     linha = bbox[3]
                     if campo == "folha":
                         folha = texto
                     elif linha in textos_da_nota:
                         textos_da_nota[linha][campo] = texto
                     else:
-                        textos_da_nota[linha] = dict()
+                        textos_da_nota[linha] = {}
                         textos_da_nota[linha][campo] = texto
                         textos_da_nota[linha]["folha"] = folha
                 else:
@@ -210,22 +206,19 @@ def tratar_texto(conteudo):
     return conteudo
 
 
-def inserir_banco_de_dados(
-    nota,
-    banco_nota,
-    operacao,
-    banco_operacao,
-):
+def inserir_banco_de_dados(nota, operacao, tipo_nota):
+    db_n = tipo[tipo_nota]["nota_db"]
+    db_c = tipo[tipo_nota]["operacao_db"]
 
-    nota_db = banco_nota.query.filter_by(**nota).first()
+    nota_db = db_n.query.filter_by(nr_nota=nota['nr_nota']).first()
     if not nota_db:
-        nota_db = banco_nota(**nota)
+        nota_db = db_n(**nota)
         db.session.add(nota_db)
 
     for operação in operacao.values():
-        operação_db = banco_operacao.query.filter_by(**operação).first()
+        operação_db = db_c.query.filter_by(**operação).first()
         if not operação_db:
-            operação_db = banco_operacao(nota_id=nota_db.id, **operação)
+            operação_db = db_c(nota_id=nota_db.id, **operação)
             db.session.add(operação_db)
 
     db.session.commit()
