@@ -10,22 +10,13 @@ class NotaBovespa(db.Model):
     data_pregao = db.Column(db.Date)
     cnpj_cpf = db.Column(db.String(40))
     codigo_cliente = db.Column(db.String(40))
-    folha_bovespa = db.relationship("FolhaBovespa", backref="nota_bovespa", lazy=True)
-
-
-class FolhaBovespa(db.Model):
-    __tablename__ = "folha_bovespa"
-
-    id = db.Column(db.Integer, primary_key=True)
-    nota_id = db.Column(db.Integer, db.ForeignKey("nota_bovespa.id"))
-    folha = db.Column(db.String(40))
     debentures = db.Column(db.String(40))
     vendas_vista = db.Column(db.String(40))
     compras_vista = db.Column(db.String(40))
     compra_opcoes = db.Column(db.String(40))
     venda_opcoes = db.Column(db.String(40))
     operacoes_termo = db.Column(db.String(40))
-    valor_operacoes_títulos_públ = db.Column(db.String(40))
+    valor_op_titulos_publ = db.Column(db.String(40))
     valor_operacoes = db.Column(db.String(40))
     irrf_day_trade = db.Column(db.String(40))
     irrf_projecao = db.Column(db.String(40))
@@ -45,8 +36,8 @@ class FolhaBovespa(db.Model):
     outros = db.Column(db.String(40))
     total_custos_despesas = db.Column(db.String(40))
     liquido = db.Column(db.String(40))
-    operacao_bovespa = db.relationship(
-        "OperacaoBovespa", backref="folha_bovespa", lazy=True
+    folha_bovespa = db.relationship(
+        "OperacaoBovespa", backref="nota_bovespa", lazy=True
     )
 
 
@@ -54,7 +45,8 @@ class OperacaoBovespa(db.Model):
     __tablename__ = "operacao_bovespa"
 
     id = db.Column(db.Integer, primary_key=True)
-    folha_id = db.Column(db.Integer, db.ForeignKey("folha_bovespa.id"))
+    nota_id = db.Column(db.Integer, db.ForeignKey("nota_bovespa.id"))
+    folha = db.Column(db.String(40))
     q = db.Column(db.String(40))
     negociacao = db.Column(db.String(40))
     cv = db.Column(db.String(40))
@@ -66,5 +58,3 @@ class OperacaoBovespa(db.Model):
     preco_ajuste = db.Column(db.String(40))
     valor_operacao = db.Column(db.String(40))
     dc = db.Column(db.String(40))
-    preco_medio_venda = db.Column(db.Float)
-    preco_medio_compra = db.Column(db.Float)

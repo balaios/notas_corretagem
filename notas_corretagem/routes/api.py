@@ -1,12 +1,12 @@
 from flask import Blueprint, jsonify, request
 
 from ..extensions import db
-from ..models.bmf import FolhaBmf, OperacaoBmf
-from ..models.bovespa import FolhaBovespa, OperacaoBovespa
+from ..models.bmf import NotaBmf, OperacaoBmf
+from ..models.bovespa import NotaBovespa, OperacaoBovespa
 from ..models.upload import Upload
 from ..pdf import principal
-from ..schemas.bmf import OperacaoBmfSchema, FolhaBmfSchema
-from ..schemas.bovespa import OperacaoBovespaSchema, FolhaBovespaSchema
+from ..schemas.bmf import NotaBmfSchema, OperacaoBmfSchema
+from ..schemas.bovespa import NotaBovespaSchema, OperacaoBovespaSchema
 
 api = Blueprint("api", __name__, url_prefix="/api")
 
@@ -43,9 +43,9 @@ def operacaobmf():
 @api.get("/resumobmf/")
 def resumobmf():
 
-    folhas = FolhaBmf.query.all()
+    folhas = NotaBmf.query.all()
 
-    schema = FolhaBmfSchema(many=True)
+    schema = NotaBmfSchema(many=True)
     data = schema.dump(folhas)
 
     return jsonify({"data": data})
@@ -65,9 +65,9 @@ def operacaob3():
 @api.get("/resumob3/")
 def resumob3():
 
-    folhas = FolhaBovespa.query.all()
+    folhas = NotaBovespa.query.all()
 
-    schema = FolhaBovespaSchema(many=True)
+    schema = NotaBovespaSchema(many=True)
     data = schema.dump(folhas)
 
     return jsonify({"data": data})

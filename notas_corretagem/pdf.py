@@ -2,8 +2,8 @@ from pdfminer.high_level import extract_pages
 from pdfminer.layout import LAParams, LTTextBoxHorizontal
 
 from .extensions import db
-from .models.bmf import FolhaBmf, NotaBmf, OperacaoBmf
-from .models.bovespa import FolhaBovespa, NotaBovespa, OperacaoBovespa
+from .models.bmf import NotaBmf, OperacaoBmf
+from .models.bovespa import NotaBovespa, OperacaoBovespa
 
 cabecalho_bmf = {
     "numero_corretora": (480, 520, 90, 110),
@@ -48,27 +48,21 @@ operacao_bmf = {
     "valor_operacao": (380, 460, 182, 600),
     "dc": (460, 480, 182, 600),
     "taxa_operacional": (540, 570, 182, 600),
-    "preco_medio_compra": (0, 0, 0, 0),
-    "preco_medio_venda": (0, 0, 0, 0),
 }
 
 cabecalho_b3 = {
     "numero_corretora": (440, 500, 160, 180),
     "nr_nota": (435, 470, 50, 70),
-    "data_precao": (520, 570, 50, 70),
+    "data_pregao": (520, 570, 50, 70),
     "cnpj_cpf": (420, 480, 140, 160),
     "codigo_cliente": (35, 70, 140, 160),
-}
-
-folha_b3 = {
-    "folha": (490, 520, 50, 70),
     "debentures": (200, 300, 455, 475),
     "vendas_vista": (200, 300, 465, 485),
     "compras_vista": (200, 300, 475, 495),
     "compra_opcoes": (200, 300, 485, 505),
     "venda_opcoes": (200, 300, 495, 510),
     "operacoes_termo": (200, 300, 505, 520),
-    "valor_operacoes_titulos_publ": (200, 300, 515, 525),
+    "valor_op_titulos_publ": (200, 300, 515, 525),
     "valor_operacoes": (200, 300, 525, 545),
     "irrf_day_trade": (30, 300, 610, 640),
     "irrf_projecao": (30, 300, 610, 640),
@@ -91,76 +85,59 @@ folha_b3 = {
 }
 
 operacao_b3 = {
+    "folha": (490, 520, 50, 70),
     "q": (30, 45, 250, 450),
     "negociacao": (40, 80, 250, 450),
     "cv": (90, 110, 250, 450),
     "tipo_mercado": (105, 160, 250, 450),
     "prazo": (170, 188, 250, 450),
-    "especificação_titulo": (185, 300, 250, 450),
+    "especificacao_titulo": (185, 300, 250, 450),
     "obs": (300, 340, 250, 450),
     "quantidade": (330, 390, 250, 450),
     "preco_ajuste": (390, 450, 250, 450),
     "valor_operacao": (450, 550, 250, 450),
     "dc": (545, 560, 250, 450),
-    "preco_medio_compra": (0, 0, 0, 0),
-    "preco_medio_venda": (0, 0, 0, 0),
 }
 
 
 def principal(arquivo_pdf):
-    laparams = LAParams(
-        char_margin=0.5,
-        line_margin=0.0,
-    )
+    laparams = LAParams(char_margin=0.5, line_margin=0.0)
     for layout in extract_pages(arquivo_pdf, laparams=laparams):
-        objetos: list = []
-        tamanho_eixo_y = layout.y1
         objetos = [obj for obj in layout._objs if isinstance(obj, LTTextBoxHorizontal)]
 
         tipo_da_nota = verificar_tipo_da_nota(objetos)
-        dicionario_bbox_texto = criar_dicionario_bbox_texto(objetos, tamanho_eixo_y)
+        dicionario_bbox_texto = criar_dicionario_bbox_texto(objetos, layout.y1)
         if "BM&F" in tipo_da_nota:
             banco_nota = NotaBmf
-            banco_folha = FolhaBmf
             banco_operacao = OperacaoBmf
             cabeçalho = seleciona_textos_nota(dicionario_bbox_texto, cabecalho_bmf)
-            folha = seleciona_textos_nota(dicionario_bbox_texto, folha_bmf)
             operacao = seleciona_textos_nota(dicionario_bbox_texto, operacao_bmf)
 
         elif "BOVESPA" in tipo_da_nota:
             banco_nota = NotaBovespa
-            banco_folha = FolhaBovespa
             banco_operacao = OperacaoBovespa
             cabeçalho = seleciona_textos_nota(dicionario_bbox_texto, cabecalho_b3)
-            folha = seleciona_textos_nota(dicionario_bbox_texto, folha_b3)
             operacao = seleciona_textos_nota(dicionario_bbox_texto, operacao_b3)
         else:
             break
 
         tratar_texto(cabeçalho)
-        tratar_texto(folha)
         tratar_texto(operacao)
-        preco_bmf_day_trade(operacao)
         inserir_banco_de_dados(
             cabeçalho,
             banco_nota,
-            folha,
-            banco_folha,
             operacao,
             banco_operacao,
         )
 
 
 def verificar_tipo_da_nota(objetos):
-    tipo_de_nota = ""
     for obj in objetos:
         if "BM&F" in obj.get_text():
-            tipo_de_nota = "BM&F"
-            break
-        elif "BOVESPA" in obj.get_text():
-            tipo_de_nota = "BOVESPA"
-            break
-    return tipo_de_nota
+            return "BM&F"
+        if "BOVESPA" in obj.get_text():
+            return "BOVESPA"
+    return "Não identificado"
 
 
 def criar_dicionario_bbox_texto(objetos, tamanho_eixo_y):
@@ -217,7 +194,7 @@ def tratar_texto(conteudo):
             )
             if chave == "irrf_day_trade":
                 conteudo[chave] = texto.split(" ")[5]
-            elif chave == "irrf_projeção":
+            elif chave == "irrf_projecao":
                 conteudo[chave] = texto.split(" ")[-1]
             elif "folha" in conteudo:
                 if "D" in texto or "C" in texto:
@@ -225,40 +202,16 @@ def tratar_texto(conteudo):
                         conteudo[chave] = str(float(texto.replace("D", "")) * -1)
                     else:
                         conteudo[chave] = texto.replace("C", "")
-            elif "número_corretora" in chave:
+            elif "numero_corretora" in chave:
                 conteudo[chave] = str(texto.rsplit()[0])
             else:
                 conteudo[chave] = str(texto)
     return conteudo
 
 
-def preco_bmf_day_trade(operacoes):
-
-    for chave, operacao in operacoes.items():
-        valor = float(operacao["preco_ajuste"])
-        if "DAY TRADE" in operacao.get("tipo_negocio"):
-            if operacao.get("cv") == "C":
-                custo = valor * 0.0019
-                operacoes[chave]["preco_medio_compra"] = valor + custo
-            elif operacao.get("cv") == "V":
-                custo = valor * 0.019
-                operacoes[chave]["preco_medio_venda"] = valor + custo
-
-        else:
-            if operacao.get("cv") == "C":
-                custo = valor * 0.005
-                operacoes[chave]["preco_medio_compra"] = valor + custo
-
-            elif operacao.get("cv") == "V":
-                custo = valor * 0.018
-                operacoes[chave]["preco_medio_venda"] = valor + custo
-
-
 def inserir_banco_de_dados(
     cabecalho,
     banco_nota,
-    folha,
-    banco_folha,
     operacao,
     banco_operacao,
 ):
@@ -268,17 +221,10 @@ def inserir_banco_de_dados(
         nota_db = banco_nota(**cabecalho)
         db.session.add(nota_db)
 
-    folha_db = banco_folha.query.filter_by(nota_id=nota_db.id, **folha).first()
-    if not folha_db:
-        folha_db = banco_folha(nota_id=nota_db.id, **folha)
-        db.session.add(folha_db)
-
     for operação in operacao.values():
-        operação_db = banco_operacao.query.filter_by(
-            folha_id=folha_db.id, **operação
-        ).first()
+        operação_db = banco_operacao.query.filter_by(**operação).first()
         if not operação_db:
-            operação_db = banco_operacao(folha_id=folha_db.id, **operação)
+            operação_db = banco_operacao(nota_db=nota_db.id, **operação)
             db.session.add(operação_db)
 
     db.session.commit()

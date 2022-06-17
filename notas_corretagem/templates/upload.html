@@ -1,9 +1,7 @@
-{% extends 'base.html' %}
-
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 <h2>Add Notas:</h2>
 <form method="POST" enctype="multipart/form-data">
-    {{ form.pdfs }}
-    <button class="btn btn-primary">Enviar</button>
+  {{ form.pdfs }}
+  <button class="btn btn-primary">Enviar</button>
 </form>
 {% endblock %}

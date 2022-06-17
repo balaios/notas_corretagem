@@ -1,34 +1,31 @@
-{% extends 'base.html' %}
-
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 
 <h2>Resumo Bovespa:</h2>
 <table class="table">
-    <tr>
-        <th>Nota:</th>
-        <th>Data:</th>
-        <th>Folhas:</th>
-        <th>Vendas à vista:</th>
-        <th>Compras à vista:</th>
-        <th>Taxa de liquidação:</th>
-        <th>Emolumentos:</th>
-        <th>I.R.R.F:</th>
-        <th>Valor:</th>
-    </tr>
-    {% for folha in folhas %}
-        {% if folha.líquido != "" %}
-            <tr>
-                <td>{{ folha.notas_bovespa.nr_nota }}</td>
-                <td>{{ folha.notas_bovespa.data_pregão }}</td>
-                <td>{{ folha.folha }}</td>
-                <td>R$ {{ folha.vendas_vista }}</td>
-                <td>R$ {{ folha.compras_vista }}</td>
-                <td>R$ {{ folha.taxa_liquidação }}</td>
-                <td>R$ {{ folha.emolumentos }}</td>
-                <td>R$ {{ folha.irrf }}</td>
-                <td>R$ {{ folha.líquido }}</td>
-            </tr>
-        {% endif %}
+  <tr>
+    <th>Nota:</th>
+    <th>Data:</th>
+    <th>Folhas:</th>
+    <th>Vendas à vista:</th>
+    <th>Compras à vista:</th>
+    <th>Taxa de liquidação:</th>
+    <th>Emolumentos:</th>
+    <th>I.R.R.F:</th>
+    <th>Valor:</th>
+  </tr>
+  {% for nota in notas %}
+  <tr>
+    <td>{{ nota.nr_nota }}</td>
+    <td>{{ nota.data_pregao }}</td>
+    <td>{{ nota.folha_bovespa }}</td>
+    <td>{{ nota.vendas_vista }}</td>
+    <td>{{ nota.compras_vista }}</td>
+    <td>{{ nota.taxa_liquidacao }}</td>
+    <td>{{ nota.emolumentos }}</td>
+    <td>{{ nota.irrf }}</td>
+    <td>{{ nota.liquido }}</td>
     {% endfor %}
+  </tr>
 </table>
+
 {% endblock %}

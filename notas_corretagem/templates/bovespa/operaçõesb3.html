@@ -1,40 +1,28 @@
-{% extends 'base.html' %}
-
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 
 <h2>Operações Bovespa:</h2>
 <table class="table">
-    <tr>
-        <th>Nota:</th>
-        <th>Data:</th>
-        <th>Folha:</th>
-        <th>C/V:</th>
-        <th>Tipo:</th>
-        <th>Titulo:</th>
-        <th>Day trade</th>
-        <th>Quantidade:</th>
-        <th>Preço médio de compra</th>
-        <th>Preço médio de venda</th>
-    </tr>
-    {% for operação in operações %}
-        <tr>
-            <td>{{ operação.folhas_bovespa.notas_bovespa.nr_nota }}</td>
-            <td>{{ operação.folhas_bovespa.notas_bovespa.data_pregão }}</td>
-            <td>{{ operação.folhas_bovespa.folha }}</td>
-            <td>{{ operação.cv }}</td>
-            <td>{{ operação.tipo_mercado }}</td>
-            <td>{{ operação.especificação_título }}</td>
-            <td>{{ operação.obs }}</td>
-            <td>{{ operação.quantidade }}</td>
-            {% if operação.cv == "C" %}
-                <td>R$ {{ operação.preço_médio_compra|round(2) }}</td>
-                <td> - </td>
-            {% else %}
-                <td> - </td>
-                <td>R$ {{ operação.preço_médio_venda|round(2) }} </td>
-            {% endif %}
-            
-        </tr>
-    {% endfor %}
+  <tr>
+    <th>Nota:</th>
+    <th>Data:</th>
+    <th>Folha:</th>
+    <th>C/V:</th>
+    <th>Tipo:</th>
+    <th>Titulo:</th>
+    <th>Quantidade:</th>
+    <th>Preco:</th>
+  </tr>
+  {% for operacao in operacoes %}
+  <tr>
+    <td>{{ operacao.folha_bovespa.nota_bovespa.nr_nota }}</td>
+    <td>{{ operacao.folha_bovespa.nota_bovespa.data_pregao }}</td>
+    <td>{{ operacao.folha_bovespa.folha }}</td>
+    <td>{{ operacao.cv }}</td>
+    <td>{{ operacao.tipo_mercado }}</td>
+    <td>{{ operacao.especificacao_titulo }}</td>
+    <td>{{ operacao.quantidade }}</td>
+    <td>{{ operacao.valor_operacao }}</td>
+  </tr>
+  {% endfor %}
 </table>
 {% endblock %}
