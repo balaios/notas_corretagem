@@ -36,7 +36,7 @@ class NotaBovespa(db.Model):
     outros = db.Column(db.String(40))
     total_custos_despesas = db.Column(db.String(40))
     liquido = db.Column(db.String(40))
-    folha_bovespa = db.relationship(
+    operacao_bovespa = db.relationship(
         "OperacaoBovespa", backref="nota_bovespa", lazy=True
     )
 

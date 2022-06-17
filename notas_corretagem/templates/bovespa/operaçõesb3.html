@@ -14,9 +14,9 @@
   </tr>
   {% for operacao in operacoes %}
   <tr>
-    <td>{{ operacao.folha_bovespa.nota_bovespa.nr_nota }}</td>
-    <td>{{ operacao.folha_bovespa.nota_bovespa.data_pregao }}</td>
-    <td>{{ operacao.folha_bovespa.folha }}</td>
+    <td>{{ operacao.nota_bovespa.nr_nota }}</td>
+    <td>{{ operacao.nota_bovespa.data_pregao }}</td>
+    <td>{{ operacao.folha }}</td>
     <td>{{ operacao.cv }}</td>
     <td>{{ operacao.tipo_mercado }}</td>
     <td>{{ operacao.especificacao_titulo }}</td>

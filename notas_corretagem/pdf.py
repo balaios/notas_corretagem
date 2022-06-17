@@ -50,7 +50,7 @@ operacao_bmf = {
     "taxa_operacional": (540, 570, 182, 600),
 }
 
-cabecalho_b3 = {
+nota_bovespa = {
     "numero_corretora": (440, 500, 160, 180),
     "nr_nota": (435, 470, 50, 70),
     "data_pregao": (520, 570, 50, 70),
@@ -84,7 +84,7 @@ cabecalho_b3 = {
     "liquido": (450, 560, 635, 655),
 }
 
-operacao_b3 = {
+operacao_bovespa = {
     "folha": (490, 520, 50, 70),
     "q": (30, 45, 250, 450),
     "negociacao": (40, 80, 250, 450),
@@ -100,7 +100,7 @@ operacao_b3 = {
 }
 
 
-def principal(arquivo_pdf):
+def ler_pdf(arquivo_pdf):
     laparams = LAParams(char_margin=0.5, line_margin=0.0)
     for layout in extract_pages(arquivo_pdf, laparams=laparams):
         objetos = [obj for obj in layout._objs if isinstance(obj, LTTextBoxHorizontal)]
@@ -116,13 +116,12 @@ def principal(arquivo_pdf):
         elif "BOVESPA" in tipo_da_nota:
             banco_nota = NotaBovespa
             banco_operacao = OperacaoBovespa
-            cabeçalho = seleciona_textos_nota(dicionario_bbox_texto, cabecalho_b3)
-            operacao = seleciona_textos_nota(dicionario_bbox_texto, operacao_b3)
+            cabeçalho = seleciona_textos_nota(dicionario_bbox_texto, nota_bovespa)
+            operacao = seleciona_textos_nota(dicionario_bbox_texto, operacao_bovespa)
         else:
             break
 
         tratar_texto(cabeçalho)
-        tratar_texto(operacao)
         inserir_banco_de_dados(
             cabeçalho,
             banco_nota,
@@ -155,6 +154,7 @@ def criar_dicionario_bbox_texto(objetos, tamanho_eixo_y):
 
 def seleciona_textos_nota(dicionario_bbox_texto, posições):
     textos_da_nota = dict()
+    folha = 0
     for bbox, texto in dicionario_bbox_texto.items():
         for campo, bboxmodelo in posições.items():
             if (
@@ -165,11 +165,14 @@ def seleciona_textos_nota(dicionario_bbox_texto, posições):
             ):
                 if "cv" in posições:
                     linha = bbox[3]
-                    if linha in textos_da_nota:
+                    if campo == "folha":
+                        folha = texto
+                    elif linha in textos_da_nota:
                         textos_da_nota[linha][campo] = texto
                     else:
                         textos_da_nota[linha] = dict()
                         textos_da_nota[linha][campo] = texto
+                        textos_da_nota[linha]["folha"] = folha
                 else:
                     if textos_da_nota.get(campo):
                         textos_da_nota[campo] += " " + texto
@@ -187,7 +190,6 @@ def tratar_texto(conteudo):
                 texto.replace("|", "")
                 .replace(".", "")
                 .replace(",", ".")
-                .replace("@", "")
                 .replace("    ", "")
                 .replace("-", "")
                 .strip()
@@ -196,12 +198,11 @@ def tratar_texto(conteudo):
                 conteudo[chave] = texto.split(" ")[5]
             elif chave == "irrf_projecao":
                 conteudo[chave] = texto.split(" ")[-1]
-            elif "folha" in conteudo:
-                if "D" in texto or "C" in texto:
-                    if "D" in texto:
-                        conteudo[chave] = str(float(texto.replace("D", "")) * -1)
-                    else:
-                        conteudo[chave] = texto.replace("C", "")
+            elif "D" in texto or "C" in texto:
+                if "D" in texto:
+                    conteudo[chave] = str(float(texto.replace("D", "")) * -1)
+                else:
+                    conteudo[chave] = texto.replace("C", "")
             elif "numero_corretora" in chave:
                 conteudo[chave] = str(texto.rsplit()[0])
             else:
@@ -210,21 +211,21 @@ def tratar_texto(conteudo):
 
 
 def inserir_banco_de_dados(
-    cabecalho,
+    nota,
     banco_nota,
     operacao,
     banco_operacao,
 ):
 
-    nota_db = banco_nota.query.filter_by(**cabecalho).first()
+    nota_db = banco_nota.query.filter_by(**nota).first()
     if not nota_db:
-        nota_db = banco_nota(**cabecalho)
+        nota_db = banco_nota(**nota)
         db.session.add(nota_db)
 
     for operação in operacao.values():
         operação_db = banco_operacao.query.filter_by(**operação).first()
         if not operação_db:
-            operação_db = banco_operacao(nota_db=nota_db.id, **operação)
+            operação_db = banco_operacao(nota_id=nota_db.id, **operação)
             db.session.add(operação_db)
 
     db.session.commit()

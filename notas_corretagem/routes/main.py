@@ -3,7 +3,7 @@ from flask import Blueprint, redirect, render_template, url_for
 from ..extensions import db
 from ..forms.upload import Pdf
 from ..models.upload import Upload
-from ..pdf import principal
+from ..pdf import ler_pdf
 
 main = Blueprint("main", __name__)
 
@@ -16,7 +16,7 @@ def index():
 @main.get("/add")
 def add():
 
-    form = Pdf(meta={'csrf': False})
+    form = Pdf(meta={"csrf": False})
 
     return render_template("upload.html", form=form)
 
@@ -24,13 +24,13 @@ def add():
 @main.post("/add")
 def valid_pdf():
 
-    form = Pdf(meta={'csrf': False})
+    form = Pdf(meta={"csrf": False})
 
     if form.validate_on_submit():
         pdfs = form.pdfs.data
         for pdf in pdfs:
             pdf.save("notas_corretagem/uploads/" + pdf.filename)
-            principal("notas_corretagem/uploads/" + pdf.filename)
+            ler_pdf("notas_corretagem/uploads/" + pdf.filename)
             upload = Upload(filename=pdf.filename)
             db.session.add(upload)
             db.session.commit()

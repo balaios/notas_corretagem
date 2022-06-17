@@ -4,7 +4,7 @@ from ..extensions import db
 from ..models.bmf import NotaBmf, OperacaoBmf
 from ..models.bovespa import NotaBovespa, OperacaoBovespa
 from ..models.upload import Upload
-from ..pdf import principal
+from ..pdf import ler_pdf
 from ..schemas.bmf import NotaBmfSchema, OperacaoBmfSchema
 from ..schemas.bovespa import NotaBovespaSchema, OperacaoBovespaSchema
 
@@ -21,7 +21,7 @@ def add():
     pdfs = request.files.getlist("pdfs")
     for pdf in pdfs:
         pdf.save("notas_corretagem/uploads/" + pdf.filename)
-        principal("notas_corretagem/uploads/" + pdf.filename)
+        ler_pdf("notas_corretagem/uploads/" + pdf.filename)
         upload = Upload(filename=pdf.filename)
         db.session.add(upload)
         db.session.commit()
