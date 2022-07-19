@@ -14,7 +14,7 @@ Jinja2==3.1.2
 Mako==1.2.0
 MarkupSafe==2.1.1
 marshmallow==3.17.0
-marshmallow-sqlalchemy==0.28.0
+marshmallow-sqlalchemy==0.28.1
 packaging==21.3
 pdfminer.six==20220524
 psycopg2-binary==2.9.3
