@@ -22,5 +22,5 @@ pycparser==2.21
 pyparsing==3.0.9
 six==1.16.0
 SQLAlchemy==1.4.39
-Werkzeug==2.1.2
+Werkzeug==2.2.0
 WTForms==3.0.1
